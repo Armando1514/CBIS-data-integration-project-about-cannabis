@@ -1,0 +1,7 @@
+{
+    "host": "localhost",
+    "port": 27017,
+    "user": "root",
+    "password": "root",
+    "db_name": "cbis"
+}
