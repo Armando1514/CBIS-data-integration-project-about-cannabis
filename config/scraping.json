@@ -16,5 +16,11 @@
             "sativaDominantHybridXPath": "//span[@id='Sativa-dominant_hybrid_strains']/ancestor::h4/following-sibling::div[1]/ul/li/text() | //span[@id='Sativa-dominant_hybrid_strains']/ancestor::h4/following-sibling::div[1]/ul/li/a/text()",
             "otherHybridXPath": "//span[@id='Other_hybrid_strains']/ancestor::h4/following-sibling::div[1]/ul/li/text() | //span[@id='Other_hybrid_strains']/ancestor::h4/following-sibling::div[1]/ul/li/a/text()"
         }
+    },
+  "leafly": {
+    "url": "https://www.leafly.com/",
+    "whatIs": {
+      "whatIsCSSPath": "div [itemprop=description] > p"
+    }
     }
 }
