@@ -36,4 +36,4 @@ app.get(config.basepath, basicRoutes.functionHomePage)
 
 // app.get(config.basepath + '/' + 'about', basicRoutes.functionAboutPage)
 
-app.listen(config.port, config.host, () => logger.info('[System] App cbis deployed at: http://' + config.host + ':' + config.port + config.basepath))
+app.listen(config.port, config.host, () => logger.info('[System] App cbis has been deployed at: http://' + config.host + ':' + config.port + config.basepath))

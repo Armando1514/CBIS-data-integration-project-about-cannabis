@@ -1,0 +1,6 @@
+{
+    "prova": {
+        "url": "http://localhost:8080/cbis",
+        "timeXPath": "//p[1]/text()"
+    }
+}
