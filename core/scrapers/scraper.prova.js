@@ -1,19 +1,22 @@
+const logger = require('loglevel')
 const scraping = require('../../config/scraping');
 const axios = require('axios');
 const DOMParser = require('xmldom').DOMParser;
 const xpath = require('xpath');
 
+logger.setLevel('info', false);
+
 async function getTime() {
     axios.get(scraping.prova.url)
     .then( response => {
-    // console.log(response.data);
-    var doc = new DOMParser().parseFromString(response.data);
-    // console.log(doc);
-    var time = xpath.select(scraping.prova.timeXPath, doc);
-    console.log(time[0].nodeValue.trim());
+        // logger.info(response.data);
+        let doc = new DOMParser().parseFromString(response.data);
+        // lgger.info(doc);
+        let time = xpath.select(scraping.prova.timeXPath, doc);
+        logger.info(time[0].data.trim());
     })
     .catch(error => {
-        console.log(error);
+        logger.error(error);
     })
 }
 

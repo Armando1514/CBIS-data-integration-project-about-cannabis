@@ -2,5 +2,19 @@
     "prova": {
         "url": "http://localhost:8080/cbis",
         "timeXPath": "//p[1]/text()"
+    },
+    "wikipedia": {
+        "url": "https://en.wikipedia.org/wiki/List_of_names_for_cannabis_strains",
+        "indica": {
+            "indicaXPath": "//span[@id='Indica_strains']/ancestor::h3/following-sibling::div[1]/ul/li/text() | //span[@id='Indica_strains']/ancestor::h3/following-sibling::div[1]/ul/li/a/text()"
+        },
+        "sativa": {
+            "sativaXPath": "//span[@id='Sativa_strains']/ancestor::h3/following-sibling::div[1]/ul/li/text() | //span[@id='Sativa_strains']/ancestor::h3/following-sibling::div[1]/ul/li/a/text()"
+        },
+        "hybrid": {
+            "indicaDominantHybridXPath": "//span[@id='Indica-dominant_hybrid_strains']/ancestor::h4/following-sibling::div[1]/ul/li/text() | //span[@id='Indica-dominant_hybrid_strains']/ancestor::h4/following-sibling::div[1]/ul/li/a/text()",
+            "sativaDominantHybridXPath": "//span[@id='Sativa-dominant_hybrid_strains']/ancestor::h4/following-sibling::div[1]/ul/li/text() | //span[@id='Sativa-dominant_hybrid_strains']/ancestor::h4/following-sibling::div[1]/ul/li/a/text()",
+            "otherHybridXPath": "//span[@id='Other_hybrid_strains']/ancestor::h4/following-sibling::div[1]/ul/li/text() | //span[@id='Other_hybrid_strains']/ancestor::h4/following-sibling::div[1]/ul/li/a/text()"
+        }
     }
 }
