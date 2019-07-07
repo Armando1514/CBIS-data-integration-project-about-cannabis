@@ -21,6 +21,15 @@
     "url": "https://www.leafly.com/",
     "whatIs": {
       "whatIsCSSPath": "div [itemprop=description] > p"
+    },
+    "growingInfo": {
+      "growingInfoCSSPath": ".grow-info-pills > .selected"
+    },
+    "flavorInfo": {
+      "flavorInfoCSSPath": ".flavor-name"
+    },
+    "mostPopularIn": {
+      "mostPopularInCSSPath": ".strain-review__text"
     }
     }
 }
