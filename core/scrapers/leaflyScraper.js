@@ -6,8 +6,8 @@ const cheerio = require('cheerio');
 
 logger.setLevel('info', false);
 
-async function getWhatIs(category, strain) {
-    request(scraping.leafly.url + category + '/' + strain, function (err, resp, html) {
+async function getWhatIs(type, strain) {
+    request(scraping.leafly.url + type + '/' + strain, function (err, resp, html) {
         if (!err) {
             let $ = cheerio.load(html);
 
@@ -18,8 +18,8 @@ async function getWhatIs(category, strain) {
     });
 }
 
-async function getGrowingInfo(category, strain) {
-    request(scraping.leafly.url + category + '/' + strain, function (err, resp, html) {
+async function getGrowingInfo(type, strain) {
+    request(scraping.leafly.url + type + '/' + strain, function (err, resp, html) {
         if (!err) {
             let $ = cheerio.load(html);
             let growingInfo = "{";
@@ -38,29 +38,8 @@ async function getGrowingInfo(category, strain) {
     });
 }
 
-
-async function getFlavorInfo(category, strain) {
-    request(scraping.leafly.url + category + '/' + strain, function (err, resp, html) {
-        if (!err) {
-            let $ = cheerio.load(html);
-            let flavorInfo = "{";
-            let info = $(scraping.leafly.flavorInfo.flavorInfoCSSPath).each(function (i, elem) {
-                if (i != 0)
-                    flavorInfo = flavorInfo + ",";
-                let flavorType = '"' + "flavor" + (i + 1) + '"' + ':"' + $(this).text() + '"';
-                flavorInfo = flavorInfo + flavorType;
-            });
-
-            flavorInfo = flavorInfo + "}";
-            console.log(flavorInfo);
-            let flavorInfo1 = JSON.parse(flavorInfo);
-            console.log(flavorInfo1.flavor2);
-        }
-    });
-}
-
-async function getMostPopularIn(category, strain) {
-    request(scraping.leafly.url + category + '/' + strain, function (err, resp, html) {
+async function getMostPopularIn(type, strain) {
+    request(scraping.leafly.url + type + '/' + strain, function (err, resp, html) {
         if (!err) {
             let $ = cheerio.load(html);
             let popularLocations = "{";
@@ -80,8 +59,22 @@ async function getMostPopularIn(category, strain) {
     });
 }
 
+async function getSimilarStrains(type, strain)
+{
+    request(scraping.leafly.url + type + '/' + strain, function (err, resp, html) {
+        if (!err) {
+            let $ = cheerio.load(html);
+            let similarStrains = [];
+            $(".lineage-parents > ul > li").each(function (i, elem) {
+                similarStrains.push($(this).find('a > div > div > div').last().text());
+            });
+            logger.info(similarStrains);
+        }
+    });  
+}
+
 
 module.exports.getWhatIs = getWhatIs;
 
 // Testing
-getMostPopularIn("hybrid", "lemon-skunk");
+getSimilarStrains("hybrid", "ak-47");

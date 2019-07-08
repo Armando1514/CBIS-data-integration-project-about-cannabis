@@ -1,4 +1,4 @@
-const logger = require('loglevel')
+const logger = require('loglevel');
 const scraping = require('../../config/scraping');
 const axios = require('axios');
 const DOMParser = require('xmldom').DOMParser;
