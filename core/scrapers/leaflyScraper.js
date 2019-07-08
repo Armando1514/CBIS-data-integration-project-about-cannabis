@@ -1,80 +1,91 @@
 const logger = require('loglevel');
 const scraping = require('../../config/scraping');
-const growingElements = require('../../config/growingInfo');
-const request = require('request');
+const axios = require('axios');
 const cheerio = require('cheerio');
 
 logger.setLevel('info', false);
 
-async function getWhatIs(type, strain) {
-    request(scraping.leafly.url + type + '/' + strain, function (err, resp, html) {
-        if (!err) {
+
+async function getInformationAboutStrainToLeaflyScraper(category, strain) {
+    axios.get(scraping.leafly.url + category + '/' + strain)
+        .then(async response => {
+
+            let html = response.data;
             let $ = cheerio.load(html);
+            try {
+                let result = [];
+                result[0] = await getWhatIs($);
+                result[1] = await getFlavorInfo($);
+                result[2] = await getMostPopularIn($);
+                result[3] = await getSimilarStrains($);
 
-            let whatIs = $(scraping.leafly.whatIs.whatIsCSSPath).text();
+                logger.info(result[0]);
+                logger.info(result[1]);
+                logger.info(result[2]);
+                logger.info(result[3]);
 
-            console.log(whatIs);
-        }
+                return result;
+            } catch (err) {
+                logger.error("ERROR OCCURRED IN LEAFLYSCRAPER : " + err);
+                return undefined;
+            }
+        })
+        .catch(err => {
+            logger.error("ERROR RELATED TO REQUEST IN LEAFLYSCRAPER" + err);
+            return undefined; //Sending to error page in caller functions
+        })
+}
+
+
+async function getWhatIs($) {
+
+    return '{"whatIs":"' + $(scraping.leafly.whatIs.whatIsCSSPath).text() + '"}';
+
+
+}
+
+
+async function getFlavorInfo($) {
+
+    let flavorInfo = "{";
+    $(scraping.leafly.flavorInfo.flavorInfoCSSPath).each(function (i) {
+        if (i !== 0)
+            flavorInfo = flavorInfo + ",";
+        let flavorType = '"' + "flavor" + (i + 1) + '"' + ':"' + $(this).text() + '"';
+        flavorInfo = flavorInfo + flavorType;
     });
+
+    flavorInfo = flavorInfo + "}";
+
+    return flavorInfo;
+
 }
 
-async function getGrowingInfo(type, strain) {
-    request(scraping.leafly.url + type + '/' + strain, function (err, resp, html) {
-        if (!err) {
-            let $ = cheerio.load(html);
-            let growingInfo = "{";
-            let info = $(scraping.leafly.growingInfo.growingInfoCSSPath).each(function (i, elem) {
-                if (i != 0)
-                    growingInfo = growingInfo + ",";
-                let infoType = '"' + growingElements[i] + '"' + ':"' + $(this).text() + '"';
-                growingInfo = growingInfo + infoType;
-            });
+async function getMostPopularIn($) {
 
-            growingInfo = growingInfo + "}";
-            console.log(growingInfo);
-            let growingInfo1 = JSON.parse(growingInfo);
-            console.log(growingInfo1.flowering);
-        }
+
+    let popularLocations = "{";
+    $(" .popular-locations li ").each(function (i) {
+
+        if (i !== 0)
+            popularLocations = popularLocations + ",";
+        let locations = '"' + "location" + (i + 1) + '"' + ':"' + $(this).text() + '"';
+        popularLocations = popularLocations + locations;
     });
+
+    popularLocations = popularLocations + "}";
+
+    return popularLocations;
+
 }
 
-async function getMostPopularIn(type, strain) {
-    request(scraping.leafly.url + type + '/' + strain, function (err, resp, html) {
-        if (!err) {
-            let $ = cheerio.load(html);
-            let popularLocations = "{";
-            let info = $(" .popular-locations li ").each(function (i, elem) {
+async function getSimilarStrains($) {
 
-                if (i != 0)
-                    popularLocations = popularLocations + ",";
-                let locations = '"' + "location" + (i + 1) + '"' + ':"' + $(this).text() + '"';
-                popularLocations = popularLocations + locations;
-            });
-
-            popularLocations = popularLocations + "}";
-            console.log(popularLocations);
-            let popularLocations1 = JSON.parse(popularLocations);
-            console.log(popularLocations1.location3);
-        }
+    let similarStrains = [];
+    $(".lineage-parents > ul > li").each(function () {
+        similarStrains.push($(this).find('a > div > div > div').last().text());
     });
+
+    return (similarStrains);
+
 }
-
-async function getSimilarStrains(type, strain)
-{
-    request(scraping.leafly.url + type + '/' + strain, function (err, resp, html) {
-        if (!err) {
-            let $ = cheerio.load(html);
-            let similarStrains = [];
-            $(".lineage-parents > ul > li").each(function (i, elem) {
-                similarStrains.push($(this).find('a > div > div > div').last().text());
-            });
-            logger.info(similarStrains);
-        }
-    });  
-}
-
-
-module.exports.getWhatIs = getWhatIs;
-
-// Testing
-getSimilarStrains("hybrid", "ak-47");
