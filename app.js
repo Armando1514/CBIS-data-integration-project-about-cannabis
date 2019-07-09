@@ -18,8 +18,9 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static('public'));
 
-app.get(config.basepath, showStrains);
-app.get(config.basapath + '/' + 'strain', showStrainInfo);
+app.get(config.basepath, basicRoutes.functionHomePage);
+app.get(config.basepath + '/' + 'typeStrains', showStrains.loadStrainsType);
+// app.get(config.basapath + '/' + 'strain', showStrainInfo);
 
 app.listen(config.port, config.host, () => logger.info('[System] App cbis has been deployed at: http://' + config.host + ':' + config.port + config.basepath));
 

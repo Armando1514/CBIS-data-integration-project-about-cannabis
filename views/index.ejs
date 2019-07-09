@@ -1,0 +1,29 @@
+<head>
+</head>
+<body>
+    <div>
+        <h1>Benvenuto!</h1>
+        <p>
+            <% var d = new Date(); %>
+            <%= d.getTime() %>
+        </p>
+    </div>
+    <script>
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("get", "cbis/typeStrains?type=" + "indica", true);
+        xhttp.setRequestHeader("connection", "close");
+        xhttp.onreadystatechange = showStrains;
+        xhttp.send(null);
+        console.log(xhttp);
+
+        function showStrains()
+        {
+            if (xhttp.readyState == 4 && xhttp.status == 200)
+            {
+                var strainsJSON = xhttp.responseText;
+                var strains = JSON.parse(strainsJSON);
+                console.log(strains);
+            }
+        }
+    </script>
+</body>
