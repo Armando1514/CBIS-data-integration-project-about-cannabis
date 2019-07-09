@@ -5,7 +5,7 @@ const cheerio = require('cheerio');
 
 logger.setLevel('info', false);
 
-async function getTimeOfUse($)
+/*async*/ function getTimeOfUse($)
 {
     let timeOfUse = $(scraping.wikileaf.timeOfUse.timeOfUseCSSPath).text();
     logger.info("Time of use: " + timeOfUse);
@@ -33,15 +33,17 @@ async function getInfo(strain)
         let response = await axios.get(scraping.wikileaf.baseURL + strain);
         let html = response.data;
         let $ = cheerio.load(html);
-        let result = await Promise.all([
-            getTimeOfUse($),
-            // getSimilarStrains($)
-        ]);
+        let timeOfUse = getTimeOfUse($); 
+        return timeOfUse;
+        // let result = await Promise.all([
+        //     getTimeOfUse($),
+        //     // getSimilarStrains($)
+        // ]);
         // let resultObj = {};
         // resultObj['timeOfUse'] = result[0];
         // resultObj['similarStrains'] = result[1];
-        logger.info(result[0]);
-        return result[0];
+        // logger.info(result[0]);
+        // return result[0];
     }
     catch (error) //When occours an error or when the strain page is not founded on wikileaf
     {

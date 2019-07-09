@@ -1,8 +1,4 @@
 {
-  "prova": {
-    "url": "http://localhost:8080/cbis",
-    "timeXPath": "//p[1]/text()"
-  },
   "wikipedia": {
     "url": "https://en.wikipedia.org/wiki/List_of_names_for_cannabis_strains",
     "indica": {
@@ -29,7 +25,11 @@
       "flavorInfoCSSPath": ".flavor-name"
     },
     "mostPopularIn": {
-      "mostPopularInCSSPath": ".strain-review__text"
+      "mostPopularInCSSPath": ".popular-locations li"
+    },
+    "similarStrains": {
+      "containerCSSPath": ".lineage-parents > ul > li",
+      "strainsNamesCSSPath": "a > div > div > div"
     }
   },
   "iLoveGrowingMarijuana": {

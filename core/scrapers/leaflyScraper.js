@@ -14,10 +14,10 @@ async function getInformationAboutStrainToLeaflyScraper(category, strain) {
             let $ = cheerio.load(html);
             try {
                 let result = await Promise.all([
-                    await getWhatIs($),
-                    await getFlavorInfo($),
-                    await getMostPopularIn($),
-                    await getSimilarStrains($)
+                    getWhatIs($),
+                    getFlavorInfo($),
+                    getMostPopularIn($),
+                    getSimilarStrains($)
                 ]);
 
                 logger.info(result[0]);
@@ -66,7 +66,7 @@ async function getMostPopularIn($) {
 
 
     let popularLocations = "{";
-    $(" .popular-locations li ").each(function (i) {
+    $(scraping.leafly.mostPopularIn.mostPopularInCSSPath).each(function (i) {
 
         if (i !== 0)
             popularLocations = popularLocations + ",";
@@ -83,8 +83,8 @@ async function getMostPopularIn($) {
 async function getSimilarStrains($) {
 
     let similarStrains = [];
-    $(".lineage-parents > ul > li").each(function () {
-        similarStrains.push($(this).find('a > div > div > div').last().text());
+    $(scraping.leafly.similarStrains.containerCSSPath).each(function () {
+        similarStrains.push($(this).find(scraping.leafly.similarStrains.strainsNamesCSSPath).last().text());
     });
 
     return (similarStrains);
