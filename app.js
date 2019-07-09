@@ -7,10 +7,13 @@ const basicRoutes = require('./core/basicRoutes');
 // const squareMetresClassesQuery = require('./core/query/squareMetresClassesQuery')
 // const ratingClassesQuery = require('./core/query/ratingClassesQuery')
 // const amenityAndPropertyQuery = require('./core/query/amenityAndPropertyQuery')
+const connection = require('./core/db/connection');
 
 const app = express();
 
 logger.setLevel('info', false);
+
+connection.createInitialConnection();
 
 app.set('view engine', 'ejs');
 
@@ -37,3 +40,5 @@ app.get(config.basepath, basicRoutes.functionHomePage);
 // app.get(config.basepath + '/' + 'about', basicRoutes.functionAboutPage)
 
 app.listen(config.port, config.host, () => logger.info('[System] App cbis has been deployed at: http://' + config.host + ':' + config.port + config.basepath));
+
+setTimeout(function () {}, 2000);
