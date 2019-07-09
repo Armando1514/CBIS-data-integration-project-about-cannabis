@@ -74,7 +74,6 @@ async function initDatabase()
                 populateStrainsCollection(db),
                 createStrainsInfoCollection(db)
             ]);
-            logger.info('daje')
         }
     });
 }

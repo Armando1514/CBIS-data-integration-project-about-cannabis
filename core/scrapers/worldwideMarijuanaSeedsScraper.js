@@ -3,7 +3,8 @@ const scraping = require('../../config/scraping');
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-logger.setLevel('info', false);
+
+// logger.setLevel('info', false);
 
 // async function getPrice(resource)
 // {
@@ -21,35 +22,35 @@ logger.setLevel('info', false);
 //     })
 // }
 
-async function getStrainPrice(strain) {
-    axios.get(scraping.worldwideMarijuanaSeeds.baseURL + scraping.worldwideMarijuanaSeeds.queryString + strain)
-    .then( response => {
+async function getInformationAboutStrainFromWorldWideMarijuanaSeedsScraper(strain) {
+    try {
+
+        let response = await await axios.get(scraping.worldwideMarijuanaSeeds.baseURL + scraping.worldwideMarijuanaSeeds.queryString + strain);
         let html = response.data;
         let $ = cheerio.load(html);
         let searchResult = $(scraping.worldwideMarijuanaSeeds.searchResult.searchResultCSSPath);
-        if (searchResult.text().trim() != '')
-        {
+        if (searchResult.text().trim() != '') {
             // let firstLink = searchResult.find('.product-index-inner').first().find('a');
             // let strainURL = firstLink['0'].attribs.href;
             // logger.info(strainURL);
             // return getPrice(strainURL);
             let price = searchResult.find(scraping.worldwideMarijuanaSeeds.price.priceCSSPath).first().text().trim();
             logger.info(price);
-            return price;
-        }
-        else
-        {
+            let obj = {};
+            obj.price = price;
+            return obj;
+        } else {
             logger.info("No result");
-            return null;
+            let obj = {};
+            obj.price = null;
+            return obj;
         }
-    })
-    .catch(error => {
+    } catch (error) //Sending to error page in caller functions
+    {
         logger.error(error);
-        return undefined; //Sending to error page in caller functions
-    })
+        return undefined;
+    }
 }
 
-module.exports.getStrainPrice = getStrainPrice;
 
-// Testing
-getStrainPrice('ak-48');
+module.exports.getInformationAboutStrainFromWorldWideMarijuanaSeedsScraper = getInformationAboutStrainFromWorldWideMarijuanaSeedsScraper;

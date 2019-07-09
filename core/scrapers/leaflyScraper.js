@@ -3,60 +3,47 @@ const scraping = require('../../config/scraping');
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-logger.setLevel('info', false);
+// logger.setLevel('info', false);
 
 
-async function getInformationAboutStrainToLeaflyScraper(category, strain) {
-    axios.get(scraping.leafly.url + category + '/' + strain)
-        .then(async response => {
+async function getInformationAboutStrainFromLeaflyScraper(category, strain) {
+    try {
+        let response = await axios.get(scraping.leafly.url + category + "/" + strain);
+        let html = response.data;
+        let $ = cheerio.load(html);
 
-            let html = response.data;
-            let $ = cheerio.load(html);
-            try {
-                let result = await Promise.all([
-                    getWhatIs($),
-                    getFlavorInfo($),
-                    getMostPopularIn($),
-                    getSimilarStrains($)
-                ]);
+        let result = await Promise.all([
+            getWhatIs($),
+            getFlavorInfo($),
+            getMostPopularIn($),
+            getSimilarStrains($)
+        ]);
 
-                logger.info(result[0]);
-                logger.info(result[1]);
-                logger.info(result[2]);
-                logger.info(result[3]);
 
-                return result;
-            } catch (err) {
-                logger.error("ERROR OCCURRED IN LEAFLYSCRAPER : " + err);
-                return undefined;
-            }
-        })
-        .catch(err => {
-            logger.error("ERROR RELATED TO REQUEST IN LEAFLYSCRAPER" + err);
-            return undefined; //Sending to error page in caller functions
-        })
+        return result;
+    } catch (error) //Sending to error page in caller functions
+    {
+        logger.error(error);
+        return undefined;
+    }
 }
-
 
 async function getWhatIs($) {
 
-    return '{"whatIs":"' + $(scraping.leafly.whatIs.whatIsCSSPath).text() + '"}';
+    let obj = {};
+    obj["what is"] = $(scraping.leafly.whatIs.whatIsCSSPath).text();
 
-
+    return obj;
 }
 
 
 async function getFlavorInfo($) {
 
-    let flavorInfo = "{";
+    let flavorInfo = {};
     $(scraping.leafly.flavorInfo.flavorInfoCSSPath).each(function (i) {
-        if (i !== 0)
-            flavorInfo = flavorInfo + ",";
-        let flavorType = '"' + "flavor" + (i + 1) + '"' + ':"' + $(this).text() + '"';
-        flavorInfo = flavorInfo + flavorType;
-    });
 
-    flavorInfo = flavorInfo + "}";
+        flavorInfo[i] = $(this).text().trim();
+    });
 
     return flavorInfo;
 
@@ -65,16 +52,13 @@ async function getFlavorInfo($) {
 async function getMostPopularIn($) {
 
 
-    let popularLocations = "{";
+    let popularLocations = {};
     $(scraping.leafly.mostPopularIn.mostPopularInCSSPath).each(function (i) {
 
-        if (i !== 0)
-            popularLocations = popularLocations + ",";
-        let locations = '"' + "location" + (i + 1) + '"' + ':"' + $(this).text() + '"';
-        popularLocations = popularLocations + locations;
+
+        popularLocations[i] = $(this).text().trim();
     });
 
-    popularLocations = popularLocations + "}";
 
     return popularLocations;
 
@@ -82,12 +66,13 @@ async function getMostPopularIn($) {
 
 async function getSimilarStrains($) {
 
-    let similarStrains = [];
-    $(scraping.leafly.similarStrains.containerCSSPath).each(function () {
-        similarStrains.push($(this).find(scraping.leafly.similarStrains.strainsNamesCSSPath).last().text());
+    let similarStrains = {};
+    $(scraping.leafly.similarStrains.containerCSSPath).each(function (i) {
+        similarStrains[i] = $(this).find(scraping.leafly.similarStrains.strainsNamesCSSPath).last().text();
     });
 
     return (similarStrains);
 
 }
 
+module.exports.getInformationAboutStrainFromLeaflyScraper = getInformationAboutStrainFromLeaflyScraper;
