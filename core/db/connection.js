@@ -17,13 +17,13 @@ module.exports.createInitialConnection = function() {
     MongoClient.connect(url, options, function(error, database) {
         if(error)
         {
-            logger.error('Connection to database refused!'); 
+            logger.error('Connection refused!'); 
             logger.error(error);
         }
         else
         {
-            db = database.db(config.dbName);
             logger.info('Initial connection has been created!');
+            db = database.db(config.dbName);
         }
     });
 }
