@@ -13,11 +13,12 @@ async function getInformationAboutStrainToLeaflyScraper(category, strain) {
             let html = response.data;
             let $ = cheerio.load(html);
             try {
-                let result = [];
-                result[0] = await getWhatIs($);
-                result[1] = await getFlavorInfo($);
-                result[2] = await getMostPopularIn($);
-                result[3] = await getSimilarStrains($);
+                let result = await Promise.all([
+                    await getWhatIs($),
+                    await getFlavorInfo($),
+                    await getMostPopularIn($),
+                    await getSimilarStrains($)
+                ]);
 
                 logger.info(result[0]);
                 logger.info(result[1]);
@@ -89,3 +90,4 @@ async function getSimilarStrains($) {
     return (similarStrains);
 
 }
+

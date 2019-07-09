@@ -12,9 +12,10 @@ async function getInformationAboutStrainToILoveGrowingMarijuanaScraper(strain) {
             let html = response.data;
             let $ = cheerio.load(html);
             try {
-                let result = [];
-                result[0] = await getInformationTable($);
-                result[1] = await getGeneralInfo($);
+                let result = await Promise.all([
+                    await getInformationTable($),
+                    await getGeneralInfo($)
+                ]);
 
                 logger.info(result[0]);
                 logger.info(result[1]);
