@@ -45,5 +45,32 @@
         "filterSelectorCSSPath": "h2 , p"
       }
     }
+  },
+  "worldwideMarijuanaSeeds": {
+    "baseURL": "https://www.worldwide-marijuana-seeds.com/search",
+    "queryString": "?type=product&q=",
+    "searchResult": {
+      "searchResultCSSPath": "#four-per-row"
+    },
+    "price":
+    {
+      "priceCSSPath": "div.product-info div.price > div"
+    }
+  },
+  "wikileaf": {
+    "baseURL": "https://www.wikileaf.com/strain/",
+    "timeOfUse": {
+      "timeOfUseCSSPath": "div.col-md-3.sidebar.ng-star-inserted > div.row > div.contents-panel.col > div.row > div.col.time > div.type-status"
+    },
+    "similarStrains": {
+      "container": {
+        "containerCSSPath": "div.similar-pro-box.row > div.col-12",
+        "containerTitleCSSPath": "h4",
+        "searchedTitle": "Similar Strains"
+      },
+      "names": {
+        "namesCSSPath": "div.ng-star-inserted > shared-card-wide-small > div.wrapper.clickable > div.content > div > a.ng-star-inserted > h5.name.disp-title"
+      }
+    }
   }
 }

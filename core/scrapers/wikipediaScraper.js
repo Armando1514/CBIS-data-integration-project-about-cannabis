@@ -7,31 +7,42 @@ const xpath = require('xpath');
 
 logger.setLevel('info', false);
 
-async function getStrains() {
-    axios.get(scraping.wikipedia.url)
-    .then( response => {
+async function getTypeStrains(doc, type)
+{
+    var typeStrains = [];
+    let xPaths = scraping.wikipedia[type];
+    for (xPath in xPaths)
+    {
+        let xPathStrains = xpath.select(scraping.wikipedia[type][xPath], doc);
+        xPathStrains.forEach(strain => {
+            let strainObj = {}
+            strainObj.name = strain.data;
+            strainObj.type = type;
+            typeStrains.push(strainObj);
+        })
+    }
+    return typeStrains;
+}
+
+async function getStrains()
+{
+    try
+    {
+        let response = await axios.get(scraping.wikipedia.url);
         let doc = new DOMParser().parseFromString(response.data);
-        var strains = [];
-        for (type of strainTypes)
-        {
-            var typeStrains = [];
-            let xPaths = scraping.wikipedia[type];
-            for (xPath in xPaths)
-            {
-                let xPathStrains = xpath.select(scraping.wikipedia[type][xPath], doc);
-                xPathStrains.forEach(strain => {
-                    typeStrains.push(strain.data.toString());
-                })
-            }
-            strains.push(typeStrains);
-        }
-        logger.info(JSON.stringify(strains, null, 4));
-        return strains;
-    })
-    .catch(error => {
+        let result = await Promise.all([
+            getTypeStrains(doc, strainTypes[0]),
+            getTypeStrains(doc, strainTypes[1]),
+            getTypeStrains(doc, strainTypes[2])
+        ])
+        logger.info(JSON.stringify(result, null, 4));
+        return result;
+    }
+    catch (error) //Sending to error page in caller functions
+    {
         logger.error(error);
-        return undefined; //Sending to error page in caller functions
-    })
+        return undefined;
+    }
 }
 
 module.exports.getStrains = getStrains;
