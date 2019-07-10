@@ -7,7 +7,8 @@ const xpath = require('xpath');
 
 // logger.setLevel('info', false);
 
-async function getTypeStrains(doc, type) {
+async function getTypeStrains(doc, type)
+{
     var typeStrains = [];
     let xPaths = scraping.wikipedia[type];
     for (xPath in xPaths) {
@@ -22,8 +23,10 @@ async function getTypeStrains(doc, type) {
     return typeStrains;
 }
 
-async function getStrains() {
-    try {
+async function getStrains()
+{
+    try
+    {
         let response = await axios.get(scraping.wikipedia.url);
         let doc = new DOMParser().parseFromString(response.data);
         let result = await Promise.all([
@@ -31,10 +34,10 @@ async function getStrains() {
             getTypeStrains(doc, strainTypes[1]),
             getTypeStrains(doc, strainTypes[2])
         ])
-
         logger.info(JSON.stringify(result, null, 4));
         return result;
-    } catch (error) //Sending to error page in caller functions
+    }
+    catch (error) //Sending to error page in caller functions
     {
         logger.error(error);
         return undefined;
