@@ -19,6 +19,8 @@ async function getInformationAboutStrainFromILoveGrowingMarijuanaScraper(strain)
 
     } catch (error) //Sending to error page in caller functions
     {
+        var obj = {};
+        obj = null;
         logger.error(error);
         return undefined;
     }

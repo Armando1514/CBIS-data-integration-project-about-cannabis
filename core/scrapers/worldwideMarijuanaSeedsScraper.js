@@ -44,16 +44,16 @@ async function getInformationAboutStrainFromWorldWideMarijuanaSeedsScraper(strai
         }
         else
         {
-            logger.info(strain +" doesn't have a price");
-            resObj.price = null;
-            return resObj;
+            var obj = {};
+            obj["price"] = null;
+            return obj;
         }
         }
         catch (error)
         {
-            logger.error(error);
-            resObj.price = null;
-            return resObj;
+            var obj = {};
+            obj["price"] = null;
+            return obj;
         }
 }
 

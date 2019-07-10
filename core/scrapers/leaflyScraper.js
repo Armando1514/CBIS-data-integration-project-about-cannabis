@@ -23,8 +23,9 @@ async function getInformationAboutStrainFromLeaflyScraper(category, strain) {
         return result;
     } catch (error) //Sending to error page in caller functions
     {
-        logger.error(error);
-        return undefined;
+        var obj = {};
+        obj = null;
+        return obj;
     }
 }
 

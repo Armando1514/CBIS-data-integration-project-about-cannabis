@@ -50,6 +50,7 @@ async function getStrainInfo(category, strain) {
                         if (err) throw err;
                         if (result == null)
                             insertElement(category, collection, strain);
+                        else return result;
                     });
                 }, function (err, ret) {
                     console.log("lock rilasciato");
@@ -67,6 +68,7 @@ async function getStrainInfo(category, strain) {
             if (err) throw err;
             if (result == null)
                 insertElement(category, collection, strain);
+            else return result;
         });
         done();
     }, function (err, ret) {
@@ -82,14 +84,14 @@ async function insertElement(category, collection, strain) {
     await Promise.all([
         iLoveGrowingMarijuanaScraper.getInformationAboutStrainFromILoveGrowingMarijuanaScraper(strain),
         leaflyScraper.getInformationAboutStrainFromLeaflyScraper(category, strain),
-        worldwideMarijuanaSeedsScraper.getInformationAboutStrainFromWorldWideMarijuanaSeedsScraper(strain),
         wikileafScraper.getInformationAboutStrainFromWikiLeafScraper(strain)
 
     ]).then(values => {
         var obj = {};
+
         obj = merge({
             name: strain
-        }, values[0], values[1], values[2], values[3]);
+        }, values[0], values[1], values[2]);
         collection.insertOne(obj, function (err, res) {
             if (err) throw err;
             console.log("Number of documents inserted: " + res.insertedCount);
@@ -111,4 +113,4 @@ function monthDiff(d1, d2) {
 module.exports.getStrainInfo = getStrainInfo;
 
 
-getStrainInfo("hybrid", "lemon-kush");
+getStrainInfo("hybrid", "girl-scout-cookies");
