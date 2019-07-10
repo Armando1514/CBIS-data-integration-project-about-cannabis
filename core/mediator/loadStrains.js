@@ -43,6 +43,7 @@ async function getStrains()
             }
         }));
         // logger.info(strains);
+        return strains;
     }
     catch (error)
     {
