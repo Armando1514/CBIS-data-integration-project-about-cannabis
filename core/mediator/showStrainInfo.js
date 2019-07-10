@@ -108,5 +108,7 @@ function monthDiff(d1, d2) {
     return months <= 0 ? 0 : months;
 }
 
+module.exports.getStrainInfo = getStrainInfo;
 
-getStrainInfo("hybrid", "lemon-kush")
+
+getStrainInfo("hybrid", "lemon-kush");

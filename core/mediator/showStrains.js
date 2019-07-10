@@ -5,6 +5,7 @@ logger.setLevel('info', false);
 
 async function loadStrainsType(req, res)
 {
+    // Testing
     // connection.createInitialConnection();
     // await sleep(1200);
 
