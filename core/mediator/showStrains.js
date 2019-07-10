@@ -32,16 +32,18 @@ async function loadStrainsType(req, res)
                 logger.info(doc);
                 strains.push(doc);
             });
-            sendResponse(strains, res);
+            // sendResponse(strains, res);
+
+            //Rendering here, with var strains
         }
     });
 }
 
-function sendResponse(result, res)
-{
-    logger.info(result);
-    res.json(result)
-}
+// function sendResponse(result, res)
+// {
+//     logger.info(result);
+//     res.json(result)
+// }
 
 module.exports.loadStrainsType = loadStrainsType;
 

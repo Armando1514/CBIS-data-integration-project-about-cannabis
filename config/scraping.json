@@ -30,6 +30,14 @@
     "similarStrains": {
       "containerCSSPath": ".lineage-parents > ul > li",
       "strainsNamesCSSPath": "a > div > div > div"
+    },
+    "reviews": {
+      "resource": "reviews",
+      "histogram": {
+        "containerCSSPath": "div.histogram-item-wrapper",
+        "labelCSSPath": "div.histogram-label",
+        "valueCSSPath": "div.hybrid-histogram.histogram-item.animate"
+      }
     }
   },
   "iLoveGrowingMarijuana": {
@@ -44,6 +52,9 @@
         "sectionsUntilFirstCSSPath": ".author_description",
         "filterSelectorCSSPath": "h2 , p"
       }
+    },
+    "image": {
+      "imageCSSPath": "div.blog_area div.single__featured > img"
     }
   },
   "worldwideMarijuanaSeeds": {

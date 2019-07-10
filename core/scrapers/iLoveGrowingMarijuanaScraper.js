@@ -3,7 +3,7 @@ const scraping = require('../../config/scraping');
 const cheerio = require('cheerio');
 const axios = require('axios');
 
-// logger.setLevel("silent");
+logger.setLevel("info", false);
 
 async function getInformationAboutStrainFromILoveGrowingMarijuanaScraper(strain) {
     try {
@@ -19,10 +19,9 @@ async function getInformationAboutStrainFromILoveGrowingMarijuanaScraper(strain)
 
     } catch (error) //Sending to error page in caller functions
     {
-        var obj = {};
-        obj = null;
+        let obj = null;
         logger.error(error);
-        return undefined;
+        return obj;
     }
 }
 
@@ -126,5 +125,34 @@ async function getGeneralInfo($) {
 
 }
 
+async function getImage(strain)
+{
+    try
+    {
+        let response = await axios.get(scraping.iLoveGrowingMarijuana.url + strain);
+        let html = response.data;
+        let $ = cheerio.load(html);
+        let imageURL = $(scraping.iLoveGrowingMarijuana.image.imageCSSPath).first().attr('src');
+        if (imageURL === undefined)
+        {
+            logger.info(strain + 'image not found');
+            return null;
+        }
+        else
+        {
+            logger.info(imageURL);
+            return imageURL;
+        }
+    }
+    catch (error)
+    {
+        // logger.error(error);
+        logger.info(strain + ' page not found');
+        return null;
+    }
+}
 
 module.exports.getInformationAboutStrainFromILoveGrowingMarijuanaScraper = getInformationAboutStrainFromILoveGrowingMarijuanaScraper;
+module.exports.getImageFromILoveGrowingMarijuana = getImage;
+
+// getImage('ak-48');

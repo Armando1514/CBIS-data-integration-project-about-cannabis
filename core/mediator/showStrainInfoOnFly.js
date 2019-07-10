@@ -6,10 +6,13 @@ const youtubeWrapper = require('../api/youtubeApiWrapper');
 async function getInfoOnFly(type, strain)
 {
     let result = await Promise.all([
-        worldwideScraper.getInformationAboutStrainFromWorldWideMarijuanaSeedsScraper(type),
+        worldwideScraper.getInformationAboutStrainFromWorldWideMarijuanaSeedsScraper(strain),
+        leaflyScraper.getReviewsFromLeafly(type, strain),
         youtubeWrapper.getStrainVideo(strain)
     ]);
-    console.log(result);
+    return result;
 }
 
-getInfoOnFly('hybrid', 'ak-47');
+module.exports.getInfoOnFly = getInfoOnFly;
+
+// getInfoOnFly('hybrid', 'ak-47');

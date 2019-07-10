@@ -8,7 +8,7 @@ const youtube = google.youtube(api.youtube.config);
 
 async function getVideo(strain)
 {
-    return new Promise((resolve, reject) => {
+    
         let options = api.youtube.searchOptions;
         var qString = '';
         for (let i = 0; i < api.youtube.keywords.length; i++)
@@ -25,23 +25,22 @@ async function getVideo(strain)
         }
         options.q = qString;
         logger.info(options);
-        youtube.search.list(options, function(err, data){
-            if (!err)
-            {
-                // logger.info(JSON.stringify(data, null, 4));
-                let videoId = data.data.items[0].id.videoId;
-                logger.info(videoId);
-                let embeddedURL = api.youtube.embeddedBaseURL + videoId;
-                logger.info(embeddedURL);
-                resolve({video: embeddedURL});
-            }
-            else
-            {
-                logger.error(err);
-                resolve({video: null});
-            }
-        });
-    })
+        try
+        {
+            let result = await youtube.search.list(options);
+            // logger.info(JSON.stringify(data, null, 4));
+            let videoId = result.data.items[0].id.videoId;
+            logger.info(videoId);
+            let embeddedURL = api.youtube.embeddedBaseURL + videoId;
+            logger.info(embeddedURL);
+            return {video: embeddedURL};
+        }
+        catch (err)
+        {
+            logger.error(err);
+            return {video: null};
+        }
+    
 }
 
 module.exports.getStrainVideo = getVideo;

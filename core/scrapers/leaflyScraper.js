@@ -76,4 +76,27 @@ async function getSimilarStrains($) {
 
 }
 
+async function getReviews(type, strain)
+{
+    try
+    {
+        let response = await axios.get(scraping.leafly.url + type + '/' + strain + '/' + scraping.leafly.reviews.resource);
+        let html = response.data;
+        let $ = cheerio.load(html);
+        let reviews = {};
+        $(scraping.leafly.reviews.histogram.containerCSSPath).each((i, elem) => {
+            let label = $(elem).find(scraping.leafly.reviews.histogram.labelCSSPath).first().text();
+            let value = $(elem).find(scraping.leafly.reviews.histogram.valueCSSPath).first().css('width');
+            reviews[label] = value;
+        });
+        return {reviews: reviews};
+    }
+    catch(error)
+    {
+        logger.error(error);
+        return {reviews: null};
+    }
+}
+
 module.exports.getInformationAboutStrainFromLeaflyScraper = getInformationAboutStrainFromLeaflyScraper;
+module.exports.getReviewsFromLeafly = getReviews;

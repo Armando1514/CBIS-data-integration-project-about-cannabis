@@ -34,7 +34,7 @@ async function getStrains()
             getTypeStrains(doc, strainTypes[1]),
             getTypeStrains(doc, strainTypes[2])
         ])
-        logger.info(JSON.stringify(result, null, 4));
+        // logger.info(JSON.stringify(result, null, 4));
         return result;
     }
     catch (error) //Sending to error page in caller functions
@@ -44,7 +44,7 @@ async function getStrains()
     }
 }
 
-module.exports.getStrains = getStrains;
+module.exports.getStrainsFromWikipedia = getStrains;
 
 // Testing
-getStrains();
+// getStrains();

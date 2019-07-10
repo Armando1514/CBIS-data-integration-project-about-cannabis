@@ -9,74 +9,72 @@ const logger = require('loglevel');
 
 // logger.setLevel('info', false);
 
-dbManager.createInitialConnection();
-
-
 const sleep = (milliseconds = 2000) => new Promise(resolve => setTimeout(resolve, milliseconds));
 
 async function getStrainInfo(category, strain) {
-    await sleep(2000)
+    dbManager.createInitialConnection();
+    await sleep(2000);
+    return new Promise((resolve, reject) => {
 
-    let lock
+        let lock;
 
-    let db = dbManager.getDatabase();
-    let collection = db.collection("strainsInfoCache");
+        let db = dbManager.getDatabase();
+        let collection = db.collection("strainsInfoCache");
 
-    //control if the value is in cache
-    let query = {
-        name: strain
-    };
-    collection.findOne(query, function (err, result) {
-        if (err) throw err;
-        // if i didn't find the strain, i need to call the scrapers
-        if (result != null) {
-            //check if the result is older than 1 month
-            //take the date from the id of the result
-            timestamp = result._id.toString().substring(0, 8)
-            //convert to a readable date
-            let date1 = new Date(parseInt(timestamp, 16) * 1000);
-            //take my date
-            let date2 = new Date();
-            console.log(monthDiff(date1, date2));
-
-            // if there is more than one month of difference between the dates, i need to call again the scrapers, otherwise i return the result from the cache.
-            if (monthDiff(date1, date2) == 0) {
-                return result;
-            } else {
-                // it's shared between differents client, i don't want duplicate in  my database, lock ensures mutual exclusion.
-                lock = new AsyncLock();
-                lock.acquire("key1", function (done) {
-                    collection.findOne(query, function (err, result) {
-                        if (err) throw err;
-                        if (result == null)
-                            insertElement(category, collection, strain);
-                        else return result;
-                    });
-                }, function (err, ret) {
-                    console.log("lock rilasciato");
-                    // lock released
-                }, {});
-            }
-        }
-    });
-
-    // there is not the element in cache, i need to call the scrapers
-    lock = new AsyncLock();
-    lock.acquire("key1", function (done) {
-        //check again if someone has inserted the  value in the cache.
+        //control if the value is in cache
+        let query = {
+            name: strain
+        };
         collection.findOne(query, function (err, result) {
             if (err) throw err;
-            if (result == null)
-                insertElement(category, collection, strain);
-            else return result;
+            // if i didn't find the strain, i need to call the scrapers
+            if (result != null) {
+                //check if the result is older than 1 month
+                //take the date from the id of the result
+                timestamp = result._id.toString().substring(0, 8)
+                //convert to a readable date
+                let date1 = new Date(parseInt(timestamp, 16) * 1000);
+                //take my date
+                let date2 = new Date();
+                console.log(monthDiff(date1, date2));
+
+                // if there is more than one month of difference between the dates, i need to call again the scrapers, otherwise i return the result from the cache.
+                if (monthDiff(date1, date2) == 0) {
+                    resolve(result);
+                } else {
+                    // it's shared between differents client, i don't want duplicate in  my database, lock ensures mutual exclusion.
+                    lock = new AsyncLock();
+                    lock.acquire("key1", function (done) {
+                        collection.findOne(query, function (err, result) {
+                            if (err) throw err;
+                            if (result == null)
+                                insertElement(category, collection, strain);
+                            else resolve(result);
+                        });
+                    }, function (err, ret) {
+                        console.log("lock rilasciato");
+                        // lock released
+                    }, {});
+                }
+            }
         });
-        done();
-    }, function (err, ret) {
-        console.log("lock rilasciato");
-        // lock released
-    }, {});
 
-
+        // there is not the element in cache, i need to call the scrapers
+        lock = new AsyncLock();
+        lock.acquire("key1", function (done) {
+            //check again if someone has inserted the  value in the cache.
+            collection.findOne(query, function (err, result) {
+                if (err) throw err;
+                if (result == null)
+                    insertElement(category, collection, strain);
+                else resolve(result);
+            });
+            done();
+        }, function (err, ret) {
+            console.log("lock rilasciato");
+            // lock released
+        }, {});
+    });
 }
 
 
@@ -113,4 +111,4 @@ function monthDiff(d1, d2) {
 module.exports.getStrainInfo = getStrainInfo;
 
 
-getStrainInfo("hybrid", "girl-scout-cookies");
+// getStrainInfo("hybrid", "girl-scout-cookies");
