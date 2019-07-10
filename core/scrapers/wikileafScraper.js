@@ -28,7 +28,8 @@ function getTimeOfUse($) {
 // }
 
 async function getInformationAboutStrainFromWikiLeafScraper(strain) {
-    try {
+    try
+    {
         let response = await axios.get(scraping.wikileaf.baseURL + strain);
         let html = response.data;
         let $ = cheerio.load(html);
@@ -43,10 +44,11 @@ async function getInformationAboutStrainFromWikiLeafScraper(strain) {
         // resultObj['similarStrains'] = result[1];
         // logger.info(result[0]);
         // return result[0];
-    } catch (error) //When occours an error or when the strain page is not founded on wikileaf
+    }
+    catch (error) //When occours an error or when the strain page is not founded on wikileaf
     {
         logger.error(error);
-        return undefined;
+        return {timeOfUse: null};
     }
 }
 

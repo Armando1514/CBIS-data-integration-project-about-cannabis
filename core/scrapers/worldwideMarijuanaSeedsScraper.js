@@ -22,34 +22,39 @@ const cheerio = require('cheerio');
 //     })
 // }
 
-async function getInformationAboutStrainFromWorldWideMarijuanaSeedsScraper(strain) {
-    try {
-
+async function getInformationAboutStrainFromWorldWideMarijuanaSeedsScraper(strain)
+{
+    try
+    {
         let response = await await axios.get(scraping.worldwideMarijuanaSeeds.baseURL + scraping.worldwideMarijuanaSeeds.queryString + strain);
+        let resObj = {};
         let html = response.data;
         let $ = cheerio.load(html);
         let searchResult = $(scraping.worldwideMarijuanaSeeds.searchResult.searchResultCSSPath);
-        if (searchResult.text().trim() != '') {
+        if (searchResult.text().trim() != '')
+        {
             // let firstLink = searchResult.find('.product-index-inner').first().find('a');
             // let strainURL = firstLink['0'].attribs.href;
             // logger.info(strainURL);
             // return getPrice(strainURL);
             let price = searchResult.find(scraping.worldwideMarijuanaSeeds.price.priceCSSPath).first().text().trim();
             logger.info(price);
-            let obj = {};
-            obj.price = price;
-            return obj;
-        } else {
-            logger.info("No result");
-            let obj = {};
-            obj.price = null;
-            return obj;
+            resObj.price = price;
+            return resObj;
         }
-    } catch (error) //Sending to error page in caller functions
-    {
-        logger.error(error);
-        return undefined;
-    }
+        else
+        {
+            logger.info(strain +" doesn't have a price");
+            resObj.price = null;
+            return resObj;
+        }
+        }
+        catch (error)
+        {
+            logger.error(error);
+            resObj.price = null;
+            return resObj;
+        }
 }
 
 
