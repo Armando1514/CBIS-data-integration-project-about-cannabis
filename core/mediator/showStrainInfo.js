@@ -2,25 +2,33 @@ const logger = require('loglevel');
 const retrievalInfoOnCache = require('./showStrainInfoOnCache');
 const retrievalInfoOnFly = require('./showStrainInfoOnFly');
 const nameParser = require('../utils/strainNameParser');
+const merge = require('merge-deep');
 
 async function loadStrainInfo(req, res)
 {
-    let type = req.query.type;
-    let strain = nameParser.parseName(req.query.strain);
-    result = await Promise.all([
+    let type = req.params.type;
+    let strain = nameParser.parseName(req.params.name);
+    Promise.all([
         retrievalInfoOnCache.getStrainInfo(type, strain),
         retrievalInfoOnFly.getInfoOnFly(type, strain)
-    ]);
-    logger.info(result);
-    result[1].forEach(element => {
-        for (prop in element)
-        {
-            result[0][prop] = element[prop];
-        }
-    });
-    logger.info(result[0]);
+    ]).then(result => {
+        // i need at least the info about the strain
+        console.log("valori" + result[0] + result[1]);
+        if (result[0] != null) {
+            console.log("valore 1" + result[0][0][0]['origin']);
+            result = merge(result);
+            res.render("index.ejs", {strainInfo: result});
+        } else {
+            console.log("no valori");
 
-    //Rendering here, with var result[0]
+            //error page
+            res.render("strain.ejs", {strainInfo: result});
+
+        }
+    }).catch(err => {
+        console.log(err);
+
+    });
 }
 
 module.exports.loadStrinInfo = loadStrainInfo;

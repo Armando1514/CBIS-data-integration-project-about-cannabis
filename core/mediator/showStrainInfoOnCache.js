@@ -9,93 +9,133 @@ const logger = require('loglevel');
 
 // logger.setLevel('info', false);
 
-const sleep = (milliseconds = 2000) => new Promise(resolve => setTimeout(resolve, milliseconds));
 
 async function getStrainInfo(category, strain) {
-    dbManager.createInitialConnection();
-    await sleep(2000);
-    return new Promise((resolve, reject) => {
+    let db = dbManager.getDatabase();
+    let collection = db.collection("strainsInfoCache");
+    let query = {
+        name: strain
+    };
+    let lock;
+    let insertIntoDB = false;
 
-        let lock;
-
-        let db = dbManager.getDatabase();
-        let collection = db.collection("strainsInfoCache");
+    let result = await collection.findOne(query).then(result => {
 
         //control if the value is in cache
-        let query = {
-            name: strain
-        };
-        collection.findOne(query, function (err, result) {
-            if (err) throw err;
-            // if i didn't find the strain, i need to call the scrapers
-            if (result != null) {
-                //check if the result is older than 1 month
-                //take the date from the id of the result
-                timestamp = result._id.toString().substring(0, 8)
-                //convert to a readable date
-                let date1 = new Date(parseInt(timestamp, 16) * 1000);
-                //take my date
-                let date2 = new Date();
-                console.log(monthDiff(date1, date2));
+        // if i didn't find the strain, i need to call the scrapers
+        if (result != null) {
+            //check if the result is older than 1 month
+            //take the date from the id of the result
+            timestamp = result._id.toString().substring(0, 8)
+            //convert to a readable date
+            let date1 = new Date(parseInt(timestamp, 16) * 1000);
+            //take my date
+            let date2 = new Date();
 
-                // if there is more than one month of difference between the dates, i need to call again the scrapers, otherwise i return the result from the cache.
-                if (monthDiff(date1, date2) == 0) {
-                    resolve(result);
-                } else {
-                    // it's shared between differents client, i don't want duplicate in  my database, lock ensures mutual exclusion.
-                    lock = new AsyncLock();
-                    lock.acquire("key1", function (done) {
-                        collection.findOne(query, function (err, result) {
-                            if (err) throw err;
-                            if (result == null)
-                                insertElement(category, collection, strain);
-                            else resolve(result);
-                        });
-                    }, function (err, ret) {
-                        console.log("lock rilasciato");
-                        // lock released
-                    }, {});
-                }
+            // if there is more than one month of difference between the dates, i need to call again the scrapers, otherwise i return the result from the cache.
+            if (monthDiff(date1, date2) > 0) {
+
+                return result;
             }
-        });
+            // call the scrapers
+            else {
 
-        // there is not the element in cache, i need to call the scrapers
+                //remove the old element
+                collection.remove(query);
+
+                insertIntoDB = true;
+                return null;
+            }
+        }
+
+
+    }).then(result => {
+
+
+        if (result == null) {
+            insertIntoDB = true;
+
+        } else {
+            return result;
+        }
+    }).catch(err => {
+        logger.error(err);
+    });
+    if (insertIntoDB) {
+
+        result = await getScrapersElements(category, collection, strain);
+        if (result == null)
+            return null;
+
+        var obj = {};
+        obj["name"] = strain;
+        obj = merge(obj, result);
+        //i need to fill the cache with the value reported by the scrapers
+        // more clients will do that operation, i use a lock for ensure mutex exclusion(i don't want duplicate)
         lock = new AsyncLock();
+
         lock.acquire("key1", function (done) {
-            //check again if someone has inserted the  value in the cache.
-            collection.findOne(query, function (err, result) {
-                if (err) throw err;
-                if (result == null)
-                    insertElement(category, collection, strain);
-                else resolve(result);
+            // i'm in the CS , nobody is able to insert the element before me.
+            console.log("acquire lock");
+            //check again if someone has inserted the  value in the cache while i was waiting for the lock (double checking).
+            collection.findOne(query).then(searched => {
+                if (searched == null) {
+
+                    insertElement(collection, obj);
+
+                    console.log("elemento inserito");
+                    done();
+
+                }
+
             });
-            done();
         }, function (err, ret) {
-            console.log("lock rilasciato");
+            console.log("release lock");
             // lock released
         }, {});
-    });
+        return obj;
+    }
+
+    return result;
+
 }
 
 
-async function insertElement(category, collection, strain) {
-    await Promise.all([
+function getScrapersElements(category, collection, strain) {
+    return Promise.all([
         iLoveGrowingMarijuanaScraper.getInformationAboutStrainFromILoveGrowingMarijuanaScraper(strain),
         leaflyScraper.getInformationAboutStrainFromLeaflyScraper(category, strain),
         wikileafScraper.getInformationAboutStrainFromWikiLeafScraper(strain)
 
     ]).then(values => {
+
         var obj = {};
 
         obj = merge({
             name: strain
         }, values[0], values[1], values[2]);
-        collection.insertOne(obj, function (err, res) {
-            if (err) throw err;
-            console.log("Number of documents inserted: " + res.insertedCount);
-            return obj;
-        });
+        //if at least one scraper get a info, insert.
+        if (values[0] != null || values[1] != null || values[2] != null) {
+            return values;
+        } else {
+            return null;
+        }
+    }).catch(err => {
+        logger.error(err);
     });
+
+}
+
+
+function insertElement(collection, obj) {
+
+    collection.insertOne(obj, function (err, res) {
+        if (err) throw err;
+        console.log("Number of documents inserted: " + res.insertedCount);
+    });
+    // i don't care if is not blocking the previous statement, because i need to know the obj, also if there is an error related to storage
+    return obj;
+
 }
 
 

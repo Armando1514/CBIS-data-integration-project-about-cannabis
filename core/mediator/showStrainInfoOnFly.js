@@ -10,7 +10,13 @@ async function getInfoOnFly(type, strain)
         leaflyScraper.getReviewsFromLeafly(type, strain),
         youtubeWrapper.getStrainVideo(strain)
     ]);
-    return result;
+    if (result["price"] != null || result["reviews"] != null || result["video"] != null) {
+        console.log("dasdasda" + result["reviews"]);
+        return result;
+    }
+
+    return null;
+
 }
 
 module.exports.getInfoOnFly = getInfoOnFly;

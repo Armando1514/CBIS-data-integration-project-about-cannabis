@@ -47,9 +47,7 @@ async function getInformationAboutStrainFromWikiLeafScraper(strain) {
     }
     catch (error) //When occours an error or when the strain page is not founded on wikileaf
     {
-        var obj = {};
-        obj["time of use"] = null;
-        return obj;
+        return null;
     }
 }
 

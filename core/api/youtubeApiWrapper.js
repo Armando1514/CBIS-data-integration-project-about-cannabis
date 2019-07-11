@@ -24,20 +24,18 @@ async function getVideo(strain)
             }
         }
         options.q = qString;
-        logger.info(options);
         try
         {
             let result = await youtube.search.list(options);
             // logger.info(JSON.stringify(data, null, 4));
+            if (result.data.items[0] == undefined)
+                return {video: null};
             let videoId = result.data.items[0].id.videoId;
-            logger.info(videoId);
             let embeddedURL = api.youtube.embeddedBaseURL + videoId;
-            logger.info(embeddedURL);
             return {video: embeddedURL};
         }
         catch (err)
         {
-            logger.error(err);
             return {video: null};
         }
     

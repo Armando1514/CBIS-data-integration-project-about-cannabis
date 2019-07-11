@@ -23,9 +23,7 @@ async function getInformationAboutStrainFromLeaflyScraper(category, strain) {
         return result;
     } catch (error) //Sending to error page in caller functions
     {
-        var obj = {};
-        obj = null;
-        return obj;
+        return null;
     }
 }
 
@@ -80,6 +78,7 @@ async function getReviews(type, strain)
 {
     try
     {
+
         let response = await axios.get(scraping.leafly.url + type + '/' + strain + '/' + scraping.leafly.reviews.resource);
         let html = response.data;
         let $ = cheerio.load(html);
@@ -93,7 +92,7 @@ async function getReviews(type, strain)
     }
     catch(error)
     {
-        logger.error(error);
+
         return {reviews: null};
     }
 }
