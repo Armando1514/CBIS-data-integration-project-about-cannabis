@@ -55,6 +55,9 @@
     },
     "image": {
       "imageCSSPath": "div.blog_area div.single__featured > img"
+    },
+    "video": {
+      "videoCSSPath":  "p > iframe";
     }
   },
   "worldwideMarijuanaSeeds": {

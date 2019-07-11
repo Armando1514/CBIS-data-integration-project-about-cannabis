@@ -13,15 +13,15 @@ async function loadStrainInfo(req, res)
         retrievalInfoOnFly.getInfoOnFly(type, strain)
     ]).then(result => {
         // i need at least the info about the strain
-        console.log("valori" + result[0]);
-        console.log("valor" + result[1]);
+
         if (result[0] != null) {
-            result = merge(result);
+            result = merge(result[0],result[1]);
+            console.log("risultato UNO "+ JSON.stringify(result));
+
             res.render("index.ejs", {strainInfo: result});
         } else {
             console.log("no valori");
             //error page
-            res.render("strain.ejs", {strainInfo: result});
 
         }
     }).catch(err => {

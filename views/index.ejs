@@ -4,9 +4,95 @@
     <div>
         <h1>Benvenuto!</h1>
         <p>
-            <% var l =strainInfo %>
-            <%= l%>
-            <%=l[0]['origin']%>
+            <%
+               let name = strainInfo["name"];
+               let origin = strainInfo[0][0]["origin"];
+               let effects = strainInfo[0][0]["effects"];
+               let price = strainInfo[0][2]["price"];
+               let descriptions = strainInfo[0][1];
+               let adverseReactions = strainInfo[0][0]["adverse reactions (negative)"];
+               let fragrance = strainInfo[0][0]["fragrance"];
+               let flavors = strainInfo[0][0]["flavors"];
+               let medical = strainInfo[0][0]["medical"];
+               let floweringTimeIndoors = strainInfo[0][0]["flowering time indoors"];
+               let floweringTimeOutdoors = strainInfo[0][0]["flowering time outdoors"];
+               let thc = strainInfo[0][0]["thc content %"];
+               let cbd = strainInfo[0][0]["cbd %"];
+               let indicaSativa = strainInfo[0][0]["indica / sativa %"];
+               let indoorYield = strainInfo[0][0]["indoor yield"];
+               let outdoorYield = strainInfo[0][0]["outdoor yield"];
+               let whatIs = strainInfo[1][0]["what is"];
+               let whereIsPopular = strainInfo[1][2];
+               let similarStrains = strainInfo[1][3];
+               let timeOfUse = strainInfo[2]["time of use"];
+               let video = strainInfo[2]["video"];
+
+               %>
+                     <p>
+                                          <%=JSON.stringify(descriptions) %>
+                                      </p>
+                     <p>
+                                          <%=price %>
+                                      </p>
+                    <p>
+                           <%=video %>
+                       </p>
+                    <p>
+                           <%=timeOfUse %>
+                       </p>
+                    <p>
+                           <%=JSON.stringify(similarStrains) %>
+                       </p>
+                    <p>
+                           <%=JSON.stringify(whereIsPopular) %>
+                       </p>
+                    <p>
+                           <%=whatIs %>
+                       </p>
+                    <p>
+                           <%=indoorYield %>
+                       </p>
+                            <p>
+                                   <%=outdoorYield %>
+                               </p>
+                    <p>
+                           <%=origin %>
+                       </p>
+                    <p>
+                           <%=indicaSativa %>
+                       </p>
+                    <p>
+                           <%=name %>
+                       </p>
+               <p>
+            <%=origin %>
         </p>
+             <p>
+                    <%=floweringTimeIndoors %>
+                </p>
+                     <p>
+                            <%=floweringTimeOutdoors %>
+                        </p>
+                             <p>
+                                    <%=thc %>
+                                </p>
+                                     <p>
+                                            <%=cbd %>
+                                        </p>
+             <p>
+                    <%=JSON.stringify(medical) %>
+                </p>
+             <p>
+                    <%=JSON.stringify(effects) %>
+                </p>
+                     <p>
+                            <%=JSON.stringify(adverseReactions) %>
+                        </p>
+                             <p>
+                                    <%=fragrance %>
+                                </p>
+                                     <p>
+                                            <%=flavors %>
+                                        </p>
     </div>
 </body>

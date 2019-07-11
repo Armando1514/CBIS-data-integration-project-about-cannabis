@@ -12,7 +12,9 @@ async function getInformationAboutStrainFromILoveGrowingMarijuanaScraper(strain)
         let $ = cheerio.load(html);
         let result = await Promise.all([
             getInformationTable($),
-            getGeneralInfo($)
+            getGeneralInfo($),
+            getPicture($),
+            getVideo($)
         ]);
 
         return result;
@@ -21,6 +23,20 @@ async function getInformationAboutStrainFromILoveGrowingMarijuanaScraper(strain)
     {
         return null;
     }
+}
+
+async function getPicture($)
+{
+    obj = {};
+    obj["picture"] = $(scraping.iLoveGrowingMarijuana.image).attr('src');
+    return obj;
+}
+
+async function getVideo($)
+{
+    obj = {};
+    obj["video"] = $(scraping.iLoveGrowingMarijuana.image).attr('src');
+    return obj;
 }
 
 
@@ -59,7 +75,7 @@ async function getInformationTable($) {
                     let content1 = tmp[j].split("–")[0];
                     let content2 = tmp[j].split("–")[1];
 
-                    tableInfo[previousProperty][content1.trim()] = content2.trim();
+                    tableInfo[previousProperty][content1.toLocaleLowerCase().trim()] = content2.trim();
 
                 }
 
@@ -95,7 +111,6 @@ async function getGeneralInfo($) {
 
         if (titleArray[index] === $(this).text() + " description") {
             if (index != 0) {
-                console.log($(this).text());
 
 
                 generalInfo[titleArray[index - 1].toLowerCase()] = previousDescription.trim();

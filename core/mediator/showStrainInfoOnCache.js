@@ -3,7 +3,7 @@ const leaflyScraper = require('../../core/scrapers/leaflyScraper');
 const worldwideMarijuanaSeedsScraper = require('../../core/scrapers/worldwideMarijuanaSeedsScraper');
 const wikileafScraper = require('../../core/scrapers/wikileafScraper');
 const dbManager = require('../../core/db/connection');
-var AsyncLock = require('async-lock');
+const AsyncLock = require('async-lock');
 const merge = require('merge-deep');
 const logger = require('loglevel');
 
@@ -33,7 +33,7 @@ async function getStrainInfo(category, strain) {
             let date2 = new Date();
 
             // if there is more than one month of difference between the dates, i need to call again the scrapers, otherwise i return the result from the cache.
-            if (monthDiff(date1, date2) > 0) {
+            if (monthDiff(date1, date2) == 0) {
 
                 return result;
             }
