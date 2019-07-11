@@ -11,12 +11,14 @@ async function getInfoOnFly(type, strain)
         youtubeWrapper.getStrainVideo(strain)
     ]);
 
-    if (result[0]["price"] != null || result[1]["reviews"] != null || result[2]["video"] != null) {
+    if (result[0]["price"] != null || result[1]["reviews"] != null || result[2]["video"] != null)
+    {
         return result;
     }
-
-    return null;
-
+    else
+    {
+        return null;
+    }
 }
 
 module.exports.getInfoOnFly = getInfoOnFly;
