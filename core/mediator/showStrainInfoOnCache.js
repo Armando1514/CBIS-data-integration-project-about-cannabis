@@ -39,10 +39,10 @@ async function getStrainInfo(category, strain) {
             }
             // call the scrapers
             else {
+                console.log("the element is older than 1 month, removing...");
 
                 //remove the old element
-                collection.remove(query);
-
+                collection.deleteOne(query);
                 insertIntoDB = true;
                 return null;
             }

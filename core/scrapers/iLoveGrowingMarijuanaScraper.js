@@ -94,8 +94,10 @@ async function getGeneralInfo($) {
     $(scraping.iLoveGrowingMarijuana.generalInfo.sectionContent.selectSectionsCSSPath).nextUntil(scraping.iLoveGrowingMarijuana.generalInfo.sectionContent.sectionsUntilFirstCSSPath, scraping.iLoveGrowingMarijuana.generalInfo.sectionContent.filterSelectorCSSPath).each(function () {
 
         if (titleArray[index] === $(this).text() + " description") {
-
             if (index != 0) {
+                console.log($(this).text());
+
+
                 generalInfo[titleArray[index - 1].toLowerCase()] = previousDescription.trim();
 
                 previousDescription = "";
@@ -116,6 +118,9 @@ async function getGeneralInfo($) {
         }
 
     });
+
+    if (generalInfo[titleArray[index - 1].toLowerCase()] === "")
+        generalInfo[titleArray[index - 1].toLowerCase()] = previousDescription;
 
     delete generalInfo["top 50 marijuana strains" + " description"];
 
