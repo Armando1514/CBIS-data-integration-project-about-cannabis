@@ -28,8 +28,10 @@ async function getVideo(strain)
         {
             let result = await youtube.search.list(options);
             // logger.info(JSON.stringify(data, null, 4));
-            if (result.data.items[0] == undefined)
+            if (result.data.items[0] === undefined)
+            {
                 return {video: null};
+            }
             let videoId = result.data.items[0].id.videoId;
             let embeddedURL = api.youtube.embeddedBaseURL + videoId;
             return {video: embeddedURL};
