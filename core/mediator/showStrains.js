@@ -1,13 +1,13 @@
 const logger = require('loglevel');
 const connection = require('../db/connection');
 
-logger.setLevel('info', false);
+// logger.setLevel('info', false);
 
 async function loadStrainsType(req, res)
 {
     // Testing
     // connection.createInitialConnection();
-    // await sleep(1200);
+    // await sleep(1700);
 
     let strains = [];
     let type = req.query.type;
@@ -18,7 +18,8 @@ async function loadStrainsType(req, res)
         projection: {
             _id: 0,
             name: 1, 
-            type: 1
+            type: 1,
+            image: 1
         }
     }
     connection.getDatabase().collection('strains').find(query, projection, async (error, cursor) => {
@@ -29,9 +30,10 @@ async function loadStrainsType(req, res)
         else
         {
             await cursor.forEach(doc => {
-                logger.info(doc);
+                // logger.info(doc);
                 strains.push(doc);
             });
+            logger.info(strains);
             // sendResponse(strains, res);
 
             //Rendering here, with var strains
@@ -47,7 +49,7 @@ async function loadStrainsType(req, res)
 
 module.exports.loadStrainsType = loadStrainsType;
 
-//  Testing
+// Testing
 // function sleep(ms) {
 //     return new Promise(resolve => setTimeout(resolve, ms));
 // }
