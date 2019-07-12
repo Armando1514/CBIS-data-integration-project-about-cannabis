@@ -3,13 +3,14 @@ const wikipediaScraper = require('../scrapers/wikipediaScraper');
 const iLoveGrowingMarijuanaScraper = require('../scrapers/iLoveGrowingMarijuanaScraper');
 const nameParser = require('../utils/strainNameParser');
 
-logger.setLevel('info', false);
+// logger.setLevel('info', false);
 
 async function getStrains()
 {
     try
     {
         let strains = await wikipediaScraper.getStrainsFromWikipedia();
+        let strainsWithImage = [];
 
         // Too fast, Axios crashs
         // for (let i = 0; i < strains.length; i++)
@@ -35,15 +36,22 @@ async function getStrains()
         // }
 
         await Promise.all(strains.map(async (typeStrains) => {
+            let typeStrainsWithImage = []
             for (let j = 0; j < typeStrains.length; j++)
             {
                 let parsedStrainName = nameParser.parseName(typeStrains[j].name)
                 let image = await iLoveGrowingMarijuanaScraper.getImageFromILoveGrowingMarijuana(parsedStrainName);
-                typeStrains[j]['image'] = image;
+                if (image != null)
+                {
+                    typeStrains[j]['image'] = image;
+                    typeStrainsWithImage.push(typeStrains[j]);
+                }
             }
+            strainsWithImage.push(typeStrainsWithImage);
         }));
-        // logger.info(strains);
-        return strains;
+        logger.info(strainsWithImage);
+        logger.info("Number of strains with image: " + (strainsWithImage[0].length + strainsWithImage[1].length + strainsWithImage[2].length));
+        return strainsWithImage;
     }
     catch (error)
     {
@@ -55,4 +63,4 @@ async function getStrains()
 module.exports.getStrains = getStrains;
 
 // Testing
-// getStrains();
+getStrains();
