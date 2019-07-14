@@ -15,18 +15,15 @@ const url = 'mongodb://' + config.host + ':' + config.port;
 
 module.exports.createInitialConnection = function() {
     MongoClient.connect(url, options, function(error, database) {
-        if(error)
-        {
-            logger.error('Connection refused!'); 
+        if (error) {
+            logger.error('Connection refused!');
             logger.error(error);
-        }
-        else
-        {
+        } else {
             logger.info('Initial connection has been created!');
             db = database.db(config.dbName);
         }
     });
-}
+};
 
 module.exports.getDatabase = function () {
     return db;

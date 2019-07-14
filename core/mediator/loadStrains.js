@@ -5,10 +5,8 @@ const nameParser = require('../utils/strainNameParser');
 
 // logger.setLevel('info', false);
 
-async function getStrains()
-{
-    try
-    {
+async function getStrains() {
+    try {
         let strains = await wikipediaScraper.getStrainsFromWikipedia();
         let strainsWithImage = [];
 
@@ -36,13 +34,11 @@ async function getStrains()
         // }
 
         await Promise.all(strains.map(async (typeStrains) => {
-            let typeStrainsWithImage = []
-            for (let j = 0; j < typeStrains.length; j++)
-            {
-                let parsedStrainName = nameParser.parseName(typeStrains[j].name)
+            let typeStrainsWithImage = [];
+            for (let j = 0; j < typeStrains.length; j++) {
+                let parsedStrainName = nameParser.parseName(typeStrains[j].name);
                 let image = await iLoveGrowingMarijuanaScraper.getImageFromILoveGrowingMarijuana(parsedStrainName);
-                if (image != null)
-                {
+                if (image != null) {
                     typeStrains[j]['image'] = image;
                     typeStrainsWithImage.push(typeStrains[j]);
                 }
@@ -52,15 +48,10 @@ async function getStrains()
         logger.info(strainsWithImage);
         logger.info("Number of strains with image: " + (strainsWithImage[0].length + strainsWithImage[1].length + strainsWithImage[2].length));
         return strainsWithImage;
-    }
-    catch (error)
-    {
+    } catch (error) {
         logger.error(error);
         return undefined;
     }
 }
 
 module.exports.getStrains = getStrains;
-
-// Testing
-getStrains();

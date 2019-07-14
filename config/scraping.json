@@ -46,9 +46,9 @@
       "informationTableCSSPath": "td"
     },
     "generalInfo": {
-      "sectionTitleCSSPath": "p + h2",
+      "sectionTitleCSSPath": "div.reg_content h2",
       "sectionContent": {
-        "selectSectionsCSSPath": "table + p + p",
+        "selectSectionsCSSPath": "table + p + p, table + p + a",
         "sectionsUntilFirstCSSPath": ".author_description",
         "filterSelectorCSSPath": "h2 , p"
       }
@@ -57,7 +57,7 @@
       "imageCSSPath": "div.blog_area div.single__featured > img"
     },
     "video": {
-      "videoCSSPath":  "p > iframe";
+      "videoCSSPath": "iframe"
     }
   },
   "worldwideMarijuanaSeeds": {

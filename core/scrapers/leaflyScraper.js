@@ -1,4 +1,3 @@
-const logger = require('loglevel');
 const scraping = require('../../config/scraping');
 const axios = require('axios');
 const cheerio = require('cheerio');
@@ -12,7 +11,7 @@ async function getInformationAboutStrainFromLeaflyScraper(category, strain) {
         let html = response.data;
         let $ = cheerio.load(html);
 
-        let result = await Promise.all([
+        return await Promise.all([
             getWhatIs($),
             getFlavorInfo($),
             getMostPopularIn($),
@@ -20,7 +19,6 @@ async function getInformationAboutStrainFromLeaflyScraper(category, strain) {
         ]);
 
 
-        return result;
     } catch (error) //Sending to error page in caller functions
     {
         return null;
@@ -74,10 +72,8 @@ async function getSimilarStrains($) {
 
 }
 
-async function getReviews(type, strain)
-{
-    try
-    {
+async function getReviews(type, strain) {
+    try {
 
         let response = await axios.get(scraping.leafly.url + type + '/' + strain + '/' + scraping.leafly.reviews.resource);
         let html = response.data;
@@ -85,15 +81,16 @@ async function getReviews(type, strain)
         let reviews = {};
         $(scraping.leafly.reviews.histogram.containerCSSPath).each((i, elem) => {
             let label = $(elem).find(scraping.leafly.reviews.histogram.labelCSSPath).first().text();
-            let value = $(elem).find(scraping.leafly.reviews.histogram.valueCSSPath).first().css('width');
-            reviews[label] = value;
+            reviews[label] = $(elem).find(scraping.leafly.reviews.histogram.valueCSSPath).first().css('width');
         });
-        return {reviews: reviews};
-    }
-    catch(error)
-    {
+        return {
+            reviews: reviews
+        };
+    } catch (error) {
 
-        return {reviews: null};
+        return {
+            reviews: null
+        };
     }
 }
 

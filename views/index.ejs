@@ -1,98 +1,550 @@
-<head>
-</head>
-<body>
-    <div>
-        <h1>Benvenuto!</h1>
-        <p>
-            <%
-               let name = strainInfo["name"];
-               let origin = strainInfo[0][0]["origin"];
-               let effects = strainInfo[0][0]["effects"];
-               let price = strainInfo[0][2]["price"];
-               let descriptions = strainInfo[0][1];
-               let adverseReactions = strainInfo[0][0]["adverse reactions (negative)"];
-               let fragrance = strainInfo[0][0]["fragrance"];
-               let flavors = strainInfo[0][0]["flavors"];
-               let medical = strainInfo[0][0]["medical"];
-               let floweringTimeIndoors = strainInfo[0][0]["flowering time indoors"];
-               let floweringTimeOutdoors = strainInfo[0][0]["flowering time outdoors"];
-               let thc = strainInfo[0][0]["thc content %"];
-               let cbd = strainInfo[0][0]["cbd %"];
-               let indicaSativa = strainInfo[0][0]["indica / sativa %"];
-               let indoorYield = strainInfo[0][0]["indoor yield"];
-               let outdoorYield = strainInfo[0][0]["outdoor yield"];
-               let whatIs = strainInfo[1][0]["what is"];
-               let whereIsPopular = strainInfo[1][2];
-               let similarStrains = strainInfo[1][3];
-               let timeOfUse = strainInfo[2]["time of use"];
-               let video = strainInfo[2]["video"];
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
 
-               %>
-                     <p>
-                                          <%=JSON.stringify(descriptions) %>
-                                      </p>
-                     <p>
-                                          <%=price %>
-                                      </p>
-                    <p>
-                           <%=video %>
-                       </p>
-                    <p>
-                           <%=timeOfUse %>
-                       </p>
-                    <p>
-                           <%=JSON.stringify(similarStrains) %>
-                       </p>
-                    <p>
-                           <%=JSON.stringify(whereIsPopular) %>
-                       </p>
-                    <p>
-                           <%=whatIs %>
-                       </p>
-                    <p>
-                           <%=indoorYield %>
-                       </p>
-                            <p>
-                                   <%=outdoorYield %>
-                               </p>
-                    <p>
-                           <%=origin %>
-                       </p>
-                    <p>
-                           <%=indicaSativa %>
-                       </p>
-                    <p>
-                           <%=name %>
-                       </p>
-               <p>
-            <%=origin %>
-        </p>
-             <p>
-                    <%=floweringTimeIndoors %>
-                </p>
-                     <p>
-                            <%=floweringTimeOutdoors %>
-                        </p>
-                             <p>
-                                    <%=thc %>
-                                </p>
-                                     <p>
-                                            <%=cbd %>
-                                        </p>
-             <p>
-                    <%=JSON.stringify(medical) %>
-                </p>
-             <p>
-                    <%=JSON.stringify(effects) %>
-                </p>
-                     <p>
-                            <%=JSON.stringify(adverseReactions) %>
-                        </p>
-                             <p>
-                                    <%=fragrance %>
-                                </p>
-                                     <p>
-                                            <%=flavors %>
-                                        </p>
-    </div>
+<head>
+	<title>CBIS</title>
+	<meta charset="utf-8">
+	<!--[if IE]>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<![endif]-->
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+	<link rel="stylesheet" href="/cbis/public/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/cbis/public/css/animations.css">
+	<link rel="stylesheet" href="/cbis/public/css/fonts.css">
+	<link rel="stylesheet" href="/cbis/public/css/main.css" class="color-switcher-link">
+	<link rel="stylesheet" href="/cbis/public/css/shop.css" class="color-switcher-link">
+	<script src="/cbis/public/js/vendor/modernizr-2.6.2.min.js"></script>
+	<!--[if lt IE 9]>
+		<script src="js/vendor/html5shiv.min.js"></script>
+		<script src="js/vendor/respond.min.js"></script>
+		<script src="js/vendor/jquery-1.12.4.min.js"></script>
+	<![endif]-->
+</head>
+
+<body>
+	<!--[if lt IE 9]>
+		<div class="bg-danger text-center">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/" class="highlight">upgrade your browser</a> to improve your experience.</div>
+	<![endif]-->
+	<div class="preloader">
+		<div class="preloader_image"></div>
+	</div>
+	<!-- search modal -->
+	<div class="modal" tabindex="-1" role="dialog" aria-labelledby="search_modal" id="search_modal">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">	<span aria-hidden="true">
+			<i class="rt-icon2-cross2"></i>
+		</span>
+		</button>
+	</div>
+	<!-- Unyson messages modal -->
+	<div class="modal fade" tabindex="-1" role="dialog" id="messages_modal">
+		<div class="fw-messages-wrap ls with_padding">
+			<!-- Uncomment this UL with LI to show messages in modal popup to your user: -->
+			<!--
+		<ul class="list-unstyled">
+			<li>Message To User</li>
+		</ul>
+		-->
+		</div>
+	</div>
+	<!-- eof .modal -->
+	<!-- wrappers for visual page editor and boxed version of template -->
+	<div id="canvas">
+		<div id="box_wrapper">
+			<!-- template sections -->
+			<section class="page_topline ls ms table_section table_section_md">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-8 col-lg-9 text-center text-sm-left">
+							<div class="inline-content big-spacing"> <span>
+						<i class="fa fa-map-marker highlight2 rightpadding_5" aria-hidden="true"></i>
+						Salerno, Italy
+					</span>  <span class="greylinks">
+						<i class="fa fa-pencil highlight2 rightpadding_5" aria-hidden="true"></i>
+						<a href="mailto:cbis@example.com">cbis@example.com</a>
+					</span>  <span>
+						<i class="fa fa-clock-o highlight2 rightpadding_5" aria-hidden="true"></i>
+						Working Hours: 24/7
+					</span>
+							</div>
+						</div>
+						<div class="col-sm-4 col-lg-3 text-center text-sm-right"> <a href="#" class="theme_button color3 block_button margin_0">World Freedom</a>
+						</div>
+					</div>
+				</div>
+			</section>
+			<header class="page_header header_white toggler_right">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-12 display_table">
+							<div class="header_left_logo display_table_cell">
+								<a href="/cbis/index" class="logo logo_with_text">
+									<img src="/cbis/public/images/logo.png" alt=""> <span class="logo_text">
+                            Cbis
+                            <small>A Data Integration project about the cannabis</small>
+                        </span>
+								</a>
+							</div>
+							<div class="header_mainmenu display_table_cell text-right">
+								<nav class="mainmenu_wrapper">
+									<ul class="mainmenu nav sf-menu">
+										<li class="active"> <a href="/cbis/index">Home</a>
+										</li>
+										<li> <a href="/cbis/indica">Indica</a>
+										</li>
+										<li> <a href="/cbis/sativa">Sativa</a>
+										</li>
+										<li> <a href="/cbis/hybrid">Hybrid</a>
+										</li>
+									</ul>
+								</nav>
+								<!-- eof main nav -->
+								<!-- header toggler --><span class="toggle_menu"><span></span></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</header>
+			<section class="intro_section page_mainslider ds light_md_bg_color all-scr-cover">
+				<div class="flexslider" data-dots="true" data-nav="true">
+					<ul class="slides">
+						<li>
+							<div class="slide-image-wrap">
+								<div class="rounded-container">
+									<img src="/cbis/public/images/slide01.jpg" alt="">
+								</div>
+							</div>
+							<div class="container">
+								<div class="row">
+									<div class="col-sm-12 text-center">
+										<div class="slide_description_wrapper">
+											<div class="slide_description">
+												<div class="intro-layer" data-animation="fadeInUp">
+													<p class="semibold text-uppercase grey">All the seeds in the world</p>
+												</div>
+												<div class="intro-layer" data-animation="fadeInUp">
+													<h2>Recreational &amp; Medical Marijuana...</h2>
+												</div>
+											</div>
+											<!-- eof .slide_description -->
+										</div>
+										<!-- eof .slide_description_wrapper -->
+									</div>
+									<!-- eof .col-* -->
+								</div>
+								<!-- eof .row -->
+							</div>
+							<!-- eof .container -->
+						</li>
+						<li>
+							<div class="slide-image-wrap">
+								<div class="rounded-container">
+									<img src="/cbis/public/images/slide02.jpg" alt="">
+								</div>
+							</div>
+							<div class="container">
+								<div class="row">
+									<div class="col-sm-12 text-center">
+										<div class="slide_description_wrapper">
+											<div class="slide_description">
+												<div class="intro-layer" data-animation="fadeInUp">
+													<p class="semibold text-uppercase grey">Search based on category</p>
+												</div>
+												<div class="intro-layer" data-animation="fadeInUp">
+													<h2>Recreational &amp; Medical Marijuana...</h2>
+												</div>
+											</div>
+											<!-- eof .slide_description -->
+										</div>
+										<!-- eof .slide_description_wrapper -->
+									</div>
+									<!-- eof .col-* -->
+								</div>
+								<!-- eof .row -->
+							</div>
+							<!-- eof .container -->
+						</li>
+						<li>
+							<div class="slide-image-wrap">
+								<div class="rounded-container">
+									<img src="/cbis/public/images/slide03.jpg" alt="">
+								</div>
+							</div>
+							<div class="container">
+								<div class="row">
+									<div class="col-sm-12 text-center">
+										<div class="slide_description_wrapper">
+											<div class="slide_description">
+												<div class="intro-layer" data-animation="fadeInUp">
+													<p class="semibold text-uppercase grey">Details about the single strain</p>
+												</div>
+												<div class="intro-layer" data-animation="fadeInUp">
+													<h2>Recreational &amp; Medical Marijuana...</h2>
+												</div>
+											</div>
+											<!-- eof .slide_description -->
+										</div>
+										<!-- eof .slide_description_wrapper -->
+									</div>
+									<!-- eof .col-* -->
+								</div>
+								<!-- eof .row -->
+							</div>
+							<!-- eof .container -->
+						</li>
+					</ul>
+				</div>
+				<!-- eof flexslider -->
+			</section>
+			<section class="ls section_offset_teasers section_padding_top_10 section_padding_bottom_10">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-3 col-sm-6 to_animate no_appear_delay" data-animation="fadeInDown" data-delay="600">
+							<div class="teaser top_offset_icon main_bg_color rounded text-center">
+								<div class="teaser_icon size_small round main_bg_color"> <i class="fa fa-globe" aria-hidden="true"></i>
+								</div>
+								<h4 class="topmargin_0"> <a href="#">Green House</a> </h4>
+								<p class="content-3lines-ellipsis">«Our repository is a greenhouse grown with love.»</p>
+							</div>
+						</div>
+						<div class="col-md-3 col-sm-6 to_animate no_appear_delay" data-animation="fadeInDown" data-delay="300">
+							<div class="teaser top_offset_icon main_bg_color2 rounded text-center">
+								<div class="teaser_icon size_small round main_bg_color2"> <i class="fa fa-plug" aria-hidden="true"></i>
+								</div>
+								<h4 class="topmargin_0"> <a href="#">Solar Energy</a> </h4>
+								<p class="content-3lines-ellipsis">«What better source of energy than the sun itself.»</p>
+							</div>
+						</div>
+						<div class="col-md-3 col-sm-6 to_animate no_appear_delay" data-animation="fadeInDown" data-delay="300">
+							<div class="teaser top_offset_icon main_bg_color3 rounded text-center">
+								<div class="teaser_icon size_small round main_bg_color3"> <i class="fa fa-leaf" aria-hidden="true"></i>
+								</div>
+								<h4 class="topmargin_0"> <a href="#">Completeness</a> </h4>
+								<p class="content-3lines-ellipsis">«Repository with all the strains.»</p>
+							</div>
+						</div>
+						<div class="col-md-3 col-sm-6 to_animate no_appear_delay" data-animation="fadeInDown" data-delay="600">
+							<div class="teaser top_offset_icon main_bg_color4 rounded text-center">
+								<div class="teaser_icon size_small round main_bg_color4"> <i class="fa fa-users" aria-hidden="true"></i>
+								</div>
+								<h4 class="topmargin_0"> <a href="#">Connoisseurs</a> </h4>
+								<p class="content-3lines-ellipsis">«We are a big family of perfect cannabis connoisseurs.»</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section id="about" class="ls section_padding_top_100 section_padding_bottom_130 columns_margin_bottom_20">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-3 col-sm-12"> <span class="small-text big highlight4">
+					What is ?
+				</span>
+							<h2 class="section_header">Why?</h2>
+						</div>
+						<div class="col-md-6 col-sm-8">
+							<p class="bold grey">My idea is ..&amp; Operated Tier III Producer &amp; Processor located Colorado.</p>
+							<p>From seed to sale, we take pride in our cannabis to ensure a smooth experience with attention to detail and quality. We have established ourselves along various points in the cannabis, industrial hemp, and related services supply chain and related services supply chain.</p>
+						</div>
+						<div class="col-md-3 col-sm-4">
+							<div class="person_bio">
+								<div class="avatar">
+									<img src="/cbis/public/images/personalPicture.jpg" alt="">
+								</div>
+								<div class="person_name grey">Armando Ferrara</div> <span class="small-text highlight4">
+						Developer and Thinker
+					</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section id="subscribe" class="cs main_color2 background_cover overlay_color page_subscribe section_padding_top_75 section_padding_bottom_75 table_section table_section_lg">
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-12 col-lg-3 text-center text-md-left"> <span class="small-text big black">
+					search based on name
+				</span>
+							<h2 class="section_header">Search your strain</h2>
+						</div>
+						<div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-12 col-md-offset-0 col-lg-9">
+							<div>
+								<form action="/cbis/searchStrain" method="get">
+									<div class="row">
+										<div class="col-xs-12">
+											<div class="form-group margin_0">
+												<input class="form-control mailchimp_fullname" name="strain" required="" type="text" placeholder="Strain's name">
+											</div>
+										</div>
+										<div class="floating col-md-4 ">
+											<button type="submit" class="theme_button color2 block_button margin_0"><i class="fa fa-search-plus rightmargin_20" aria-hidden="true"></i>GO</button>
+										</div>
+										<div class="col-sm-12 margin_0">
+											<div class="response"></div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section id="technologies" class="ls section_padding_top_150 section_padding_bottom_150 columns_margin_bottom_40">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-3 col-md-4"> <span class="small-text big highlight2">
+					based on strain types
+				</span>
+							<h2 class="section_header">Category</h2>
+							<p class="topmargin_50">
+								<a href="#" class="theme_button inverse color2 complex_button">	<span class="left-icon">
+							<img src="/cbis/public/images/bbb.png" alt="" draggable="false">
+						</span>
+									ALL THE STRAINS
+									<br>IN OUR DB	<span class="right-icon"><%=elements[3]%></span>
+								</a>
+							</p>
+						</div>
+						<div class="col-md-8 col-lg-9">
+							<div class="row row-flex">
+								<div class="col-lg-4 col-sm-6">
+									<article class="product ls vertical-item content-padding rounded overflow_hidden loop-color">
+										<div class="item-media">
+											<img src="<%=elements[4][4].image%>" alt="" /> <span class="price main_bg_color">
+								<ins>
+									<span class="amount">Indica Strains: </span>
+											<%=elements[1]%>
+												</ins>
+												</span>
+										</div>
+										<div class="item-content">
+											<h4 class="entry-title topmargin_5"> <a href="/cbis/indica">Indica</a> </h4>
+											<p>Cannabis Indica plants have higher CBD and lower THC counts.</p>
+										</div>
+									</article>
+								</div>
+								<div class="col-lg-4 col-sm-6">
+									<article class="product ls vertical-item content-padding rounded overflow_hidden loop-color">
+										<div class="item-media">
+											<img src="<%=elements[4][5].image%>" alt="" /> <span class="price main_bg_color">
+								<ins>
+									<span class="amount">Sativa strains: </span>
+											<%=elements[0]%>
+												</ins>
+												</span>
+										</div>
+										<div class="item-content">
+											<h4 class="entry-title topmargin_5"> <a href="/cbis/sativa">Sativa</a> </h4>
+											<p>Cannabis Sativa plants have lower CBD and higher THC counts.</p>
+										</div>
+									</article>
+								</div>
+								<div class="col-lg-4 col-sm-6">
+									<article class="product ls vertical-item content-padding rounded overflow_hidden loop-color">
+										<div class="item-media">
+											<img src="<%=elements[4][5].image%>" alt="" /> <span class="price main_bg_color">
+								<ins>
+									<span class="amount">Hybrid strains: </span>
+											<%=elements[2]%>
+												</ins>
+												</span>
+										</div>
+										<div class="item-content">
+											<h4 class="entry-title topmargin_5"> <a href="/cbis/hybrid">Hybrid</a> </h4>
+											<p>Hybrids are thought to fall somewhere in between the indica-sativa spectrum.</p>
+										</div>
+									</article>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section id="products" class="ds parallax page_shop section_padding_top_150 section_padding_bottom_150">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-3 col-sm-4"> <span class="small-text big highlight4">
+					Our seeds
+				</span>
+							<h2 class="section_header">3 RANDOM STRAINS</h2>
+							<div class="widget widget_categories topmargin_50">
+								<ul class="greylinks color4">
+									<li class="">
+										<a href="/cbis/<%=elements[4][0].type%>/single-strain/<%=elements[4][0].name%>">
+											<%=elements[4][0].name%>
+										</a>
+									</li>
+									<li class="">
+										<a href="/cbis/<%=elements[4][1].type%>/single-strain/<%=elements[4][1].name%>">
+											<%=elements[4][1].name%>
+										</a>
+									</li>
+									<li class="">
+										<a href="/cbis/<%=elements[4][2].type%>/single-strain/<%=elements[4][2].name%>">
+											<%=elements[4][2].name%>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-lg-9 col-sm-8">
+							<div class="owl-carousel" data-nav="true" data-responsive-lg="3">
+								<article class="product ls vertical-item content-padding rounded overflow_hidden loop-color">
+									<div class="item-media">
+										<img height="60%" src="<%=elements[4][0].image%>" alt="" /> <span class="price main_bg_color">
+								<ins>
+									<span class="amount"><%=elements[4][0].type%></span>
+										</ins>
+										</span>
+										<div class="item-content">
+											<div>
+												<h4 class="entry-title topmargin_5"> <a href="/cbis/<%=elements[4][0].type%>/single-strain/<%=elements[4][0].name%>"><%=elements[4][0].name%></a> </h4>
+												<span style="width:100%">
+
+								</span>
+											</div>
+										</div>
+								</article>
+								<article class="product ls vertical-item content-padding rounded overflow_hidden loop-color">
+									<div class="item-media">
+										<img height="60%" src="<%=elements[4][1].image%>" alt="" /> <span class="price main_bg_color">
+                                          								<ins>
+                                          									<span class="amount"><%=elements[4][1].type%></span>
+										</ins>
+										</span>
+										<div class="item-content">
+											<div>
+												<h4 class="entry-title topmargin_5"> <a href="/cbis/<%=elements[4][0].type%>/single-strain/<%=elements[4][1].name%>"><%=elements[4][1].name%></a> </h4>
+												<span style="width:100%">
+
+                                          								</span>
+											</div>
+										</div>
+								</article>
+								<article class="product ls vertical-item content-padding rounded overflow_hidden loop-color">
+									<div class="item-media">
+										<img height="60%" src="<%=elements[4][2].image%>" alt="" /> <span class="price main_bg_color">
+                                                                        								<ins>
+                                                                        									<span class="amount"><%=elements[4][2].type%></span>
+										</ins>
+										</span>
+										<div class="item-content">
+											<div>
+												<h4 class="entry-title topmargin_5"> <a href="/cbis/<%=elements[4][2].type%>/single-strain/<%=elements[4][2].name%>"><%=elements[4][2].name%></a> </h4>
+												<span style="width:100%">
+
+                                                                        								</span>
+											</div>
+										</div>
+								</article>
+								</div>
+								</div>
+								</div>
+							</div>
+			</section>
+			<footer class="page_footer ds section_padding_top_150 section_padding_bottom_130 columns_margin_bottom_30">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-3 col-md-12 text-center">
+							<div class="logo vertical_logo topmargin_20">
+								<img src="/cbis/public/images/logo.png" alt=""> <span class="logo_text">
+                        Cbis
+                        <small>A Data Integration project about the cannabis</small>
+                    </span>
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-4 col-sm-6 text-center text-sm-left">
+							<div class="widget widget_text greylinks color2">
+								<h4 class="widget-title"> Our Contacts </h4>
+								<div class="media small-media">
+									<div class="media-left"> <i class="fa fa-map-marker highlight2"></i>
+									</div>
+									<div class="media-body">Salerno, Italy</div>
+								</div>
+								<div class="media small-media">
+									<div class="media-left"> <i class="fa fa-pencil highlight2"></i>
+									</div>
+									<div class="media-body"> <a href="mailto:armando@ferrara.link">armando@ferrara.link</a>
+									</div>
+								</div>
+								<div class="media small-media">
+									<div class="media-left"> <i class="fa fa-internet-explorer highlight2"></i>
+									</div>
+									<div class="media-body"> <a href="http://ferrara.link/">www.ferrara.link</a>
+									</div>
+								</div>
+								<div class="media small-media">
+									<div class="media-left"> <i class="fa fa-phone highlight2"></i>
+									</div>
+									<div class="media-body">(+39) 846 4235 (fake)</div>
+								</div>
+								<div class="media small-media">
+									<div class="media-left"> <i class="fa fa-clock-o highlight2"></i>
+									</div>
+									<div class="media-body">Working Hours: 24/7</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-4 col-sm-6 text-center text-sm-left">
+							<div class="widget widget_recent_posts">
+								<h4 class="widget-title">Adopted technologies</h4>
+								<ul>
+									<li class="media">
+										<div class="media-left media-middle">
+											<img src="/cbis/public/images/nodejs.png" alt="">
+										</div>
+										<div class="media-body media-middle">
+											<p class="darklinks"> <a href="https://nodejs.org/it/">Node.js</a>
+											</p> <span class="small-text highlightlinks">
+							</span>
+										</div>
+									</li>
+									<li class="media">
+										<div class="media-left media-middle">
+											<img src="/cbis/public/images/mongodb.jpg" alt="">
+										</div>
+										<div class="media-body media-middle">
+											<p class="darklinks"> <a href="https://www.mongodb.com/">MongoDB</a>
+											</p> <span class="small-text highlightlinks">
+							</span>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-4 col-sm-6 col-sm-offset-3 col-md-offset-0 text-center">
+							<div class="widget widget_text">
+								<a href="#">
+									<img src="/cbis/public/images/banner.png" alt="">
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</footer>
+			<section class="ds ms page_copyright section_padding_50">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-12 text-center">
+							<p>Project for educational purposes, not commercial use. Developed by <a href="http://ferrara.link/">Armando Ferrara</a> and Andrea Mogavero, for further information <a href="https://github.com/Armando1514/cbis-data-integration">search on GitHub.</a>
+							</p>
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+			</div>
+			</div>
+			<!-- eof #canvas -->
+			<script src="/cbis/public/js/compressed.js"></script>
+			<script src="/cbis/public/js/main.js"></script>
+			<script src="/cbis/public/js/switcher.js"></script>
 </body>
+<!-- Mirrored from webdesign-finder.com/html/canabia/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 10 Jul 2019 10:07:09 GMT -->
+
+</html>

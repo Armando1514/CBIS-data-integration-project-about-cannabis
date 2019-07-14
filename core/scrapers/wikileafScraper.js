@@ -1,17 +1,23 @@
-const logger = require('loglevel');
 const scraping = require('../../config/scraping');
 const axios = require('axios');
 const cheerio = require('cheerio');
 
 // logger.setLevel('info', false);
 
-/*async*/
-function getTimeOfUse($) {
+async function getTimeOfUse($) {
     let timeOfUse = $(scraping.wikileaf.timeOfUse.timeOfUseCSSPath).text();
     let obj = {};
     obj["time of use"] = timeOfUse;
     return obj;
 }
+
+async function getSmallPicture($) {
+    let obj = {};
+    obj["small picture"] = $("meta[name='twitter:image']").attr("content");
+    console.log(obj);
+    return obj;
+}
+
 
 // async function getSimilarStrains($)
 // {
@@ -28,26 +34,25 @@ function getTimeOfUse($) {
 // }
 
 async function getInformationAboutStrainFromWikiLeafScraper(strain) {
-    try
-    {
+    try {
         let response = await axios.get(scraping.wikileaf.baseURL + strain);
         let html = response.data;
         let $ = cheerio.load(html);
-        let timeOfUse = getTimeOfUse($);
-        return timeOfUse;
-        // let result = await Promise.all([
-        //     getTimeOfUse($),
-        //     // getSimilarStrains($)
-        // ]);
-        // let resultObj = {};
-        // resultObj['timeOfUse'] = result[0];
-        // resultObj['similarStrains'] = result[1];
-        // logger.info(result[0]);
-        // return result[0];
-    }
-    catch (error) //When occours an error or when the strain page is not founded on wikileaf
-    {
-        return null;
+        return await Promise.all([
+            getTimeOfUse($),
+            getSmallPicture($),
+        ]);
+
+
+    } catch (error) {
+        let obj = [];
+        obj.push({
+            'time of use': null
+        });
+        obj.push({
+            'small picture': null
+        });
+        return obj;
     }
 }
 

@@ -16,29 +16,29 @@ async function getInformationAboutStrainFromILoveGrowingMarijuanaScraper(strain)
             getPicture($),
             getVideo($)
         ]);
+        console.log("rino" + JSON.stringify(result));
 
         return result;
 
     } catch (error) //Sending to error page in caller functions
     {
+        console.log("dsa" + error);
+
         return null;
     }
 }
 
-async function getPicture($)
-{
+async function getPicture($) {
     obj = {};
-    obj["picture"] = $(scraping.iLoveGrowingMarijuana.image).attr('src');
+    obj["picture"] = $(scraping.iLoveGrowingMarijuana.image.imageCSSPath).attr('src');
     return obj;
 }
 
-async function getVideo($)
-{
+async function getVideo($) {
     obj = {};
-    obj["video"] = $(scraping.iLoveGrowingMarijuana.image).attr('src');
+    obj["video"] = $(scraping.iLoveGrowingMarijuana.video.videoCSSPath).attr('src');
     return obj;
 }
-
 
 async function getInformationTable($) {
 
@@ -48,16 +48,15 @@ async function getInformationTable($) {
     $(scraping.iLoveGrowingMarijuana.informationTable.informationTableCSSPath).each(function () {
 
         //only the values that i want
-        element = "";
-        // regex for check if is the string is composed by characters and not numbers
+        // regex for check if the string is composed by characters and not numbers
         var patt = new RegExp("([A-Za-z])\\w+");
 
         //if is uppercase, does it means that is an element (only characters not numbers) , not a content
         if (patt.test($(this).text()) && $(this).text().trim() === $(this).text().trim().toUpperCase()) {
 
-            tableInfo[$(this).text().toLowerCase()];
+            tableInfo[$(this).text().toLowerCase().replace(/ +/g, "")];
 
-            previousProperty = $(this).text().toLowerCase();
+            previousProperty = $(this).text().toLowerCase().replace(/ +/g, "");
 
 
 
@@ -66,16 +65,21 @@ async function getInformationTable($) {
             // control if there are <br> tag, does it means that is a composite object
             if ($(this).html().search("br") > 0) {
 
+
                 tableInfo[previousProperty] = {};
-                //array of elements divided by -
-                let tmp = $(this).text().split(/\s*\n\s*/);
+                //create the delimiter
+                let text = $(this).html().replace(/<br\s*[\/]?>/gi, "\n").replace(/&#x2013;/gi, "–");
+                let tmp = text.split(/\s*\n\s*/);
+
                 for (let j in tmp) {
+
 
                     //take the two elements separated by -
                     let content1 = tmp[j].split("–")[0];
                     let content2 = tmp[j].split("–")[1];
 
-                    tableInfo[previousProperty][content1.toLocaleLowerCase().trim()] = content2.trim();
+                    if (content1 !== undefined && content2 !== undefined)
+                        tableInfo[previousProperty][content1.toLocaleLowerCase().trim()] = parseInt(content2.trim());
 
                 }
 
@@ -86,8 +90,9 @@ async function getInformationTable($) {
 
             }
         }
-    });
 
+    });
+    console.log(JSON.stringify(tableInfo));
 
     return tableInfo;
 
@@ -103,6 +108,7 @@ async function getGeneralInfo($) {
 
     // take all the title of the sections
     $(scraping.iLoveGrowingMarijuana.generalInfo.sectionTitleCSSPath).each(function (i) {
+        console.log($(this).text());
 
         titleArray[i] = $(this).text() + " description";
     });
@@ -110,7 +116,7 @@ async function getGeneralInfo($) {
     $(scraping.iLoveGrowingMarijuana.generalInfo.sectionContent.selectSectionsCSSPath).nextUntil(scraping.iLoveGrowingMarijuana.generalInfo.sectionContent.sectionsUntilFirstCSSPath, scraping.iLoveGrowingMarijuana.generalInfo.sectionContent.filterSelectorCSSPath).each(function () {
 
         if (titleArray[index] === $(this).text() + " description") {
-            if (index != 0) {
+            if (index !== 0) {
 
 
                 generalInfo[titleArray[index - 1].toLowerCase()] = previousDescription.trim();
@@ -143,27 +149,20 @@ async function getGeneralInfo($) {
 
 }
 
-async function getImage(strain)
-{
-    try
-    {
+async function getImage(strain) {
+    try {
         let response = await axios.get(scraping.iLoveGrowingMarijuana.url + strain);
         let html = response.data;
         let $ = cheerio.load(html);
         let imageURL = $(scraping.iLoveGrowingMarijuana.image.imageCSSPath).first().attr('src');
-        if (imageURL === undefined)
-        {
+        if (imageURL === undefined) {
             logger.info(strain + 'image not found');
             return null;
-        }
-        else
-        {
+        } else {
             logger.info(imageURL);
             return imageURL;
         }
-    }
-    catch (error)
-    {
+    } catch (error) {
         // logger.error(error);
         logger.info(strain + ' page not found');
         return null;

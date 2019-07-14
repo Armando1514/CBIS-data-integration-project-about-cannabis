@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+
+<head>
+    <title>CBIS</title>
+    <meta charset="utf-8">
+    <!--[if IE]>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <![endif]-->
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <link rel="stylesheet" href="/cbis/public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/cbis/public/css/animations.css">
+    <link rel="stylesheet" href="/cbis/public/css/fonts.css">
+    <link rel="stylesheet" href="/cbis/public/css/main.css" class="color-switcher-link">
+    <link rel="stylesheet" href="/cbis/public/css/shop.css" class="color-switcher-link">
+    <script src="/cbis/public/js/vendor/modernizr-2.6.2.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="js/vendor/html5shiv.min.js"></script>
+    <script src="js/vendor/respond.min.js"></script>
+    <script src="js/vendor/jquery-1.12.4.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<!--[if lt IE 9]>
+<div class="bg-danger text-center">You are using an <strong>outdated</strong> browser. Please <a
+        href="http://browsehappy.com/" class="highlight">upgrade your browser</a> to improve your experience.
+</div>
+<![endif]-->
+<div class="preloader">
+    <div class="preloader_image"></div>
+</div>
+<!-- search modal -->
+<div class="modal" tabindex="-1" role="dialog" aria-labelledby="search_modal" id="search_modal">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">	<span aria-hidden="true">
+			<i class="rt-icon2-cross2"></i>
+		</span>
+    </button>
+</div>
+<!-- Unyson messages modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="messages_modal">
+    <div class="fw-messages-wrap ls with_padding">
+        <!-- Uncomment this UL with LI to show messages in modal popup to your user: -->
+        <!--
+<ul class="list-unstyled">
+    <li>Message To User</li>
+</ul>
+-->
+    </div>
+</div>
+<!-- eof .modal -->
+<!-- wrappers for visual page editor and boxed version of template -->
+<div id="canvas">
+    <div id="box_wrapper">
+        <!-- template sections -->
+        <section class="page_topline ls ms table_section table_section_md">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 col-lg-9 text-center text-sm-left">
+                        <div class="inline-content big-spacing"> <span>
+						<i class="fa fa-map-marker highlight2 rightpadding_5" aria-hidden="true"></i>
+						Salerno, Italy
+					</span> <span class="greylinks">
+						<i class="fa fa-pencil highlight2 rightpadding_5" aria-hidden="true"></i>
+						<a href="mailto:cbis@example.com">cbis@example.com</a>
+					</span> <span>
+						<i class="fa fa-clock-o highlight2 rightpadding_5" aria-hidden="true"></i>
+						Working Hours: 24/7
+					</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-lg-3 text-center text-sm-right"><a href="#"
+                                                                                class="theme_button color3 block_button margin_0">World
+                        Freedom</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <header class="page_header header_white toggler_right">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 display_table">
+                        <div class="header_left_logo display_table_cell">
+                            <a href="/cbis/index" class="logo logo_with_text">
+                                <img src="/cbis/public/images/logo.png" alt=""> <span class="logo_text">
+                            Cbis
+                            <small>A Data Integration project about the cannabis</small>
+                        </span>
+                            </a>
+                        </div>
+                        <div class="header_mainmenu display_table_cell text-right">
+                            <nav class="mainmenu_wrapper">
+                                <ul class="mainmenu nav sf-menu">
+                                    <li class="active"><a href="/cbis/index">Home</a>
+                                    </li>
+                                    <li><a href="/cbis/indica">Indica</a>
+                                    </li>
+                                    <li><a href="/cbis/sativa">Sativa</a>
+                                    </li>
+                                    <li><a href="/cbis/hybrid">Hybrid</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <!-- eof main nav -->
+                            <!-- header toggler --><span class="toggle_menu"><span></span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <section class="ls ms section_404 section_padding_top_25 section_padding_bottom_50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3 text-center">
+                        <p class="not_found"><span class="highlight4">404</span>
+                        </p>
+                        <h3>Oops, page not found!</h3>
+                        <p>You can search the strains:</p>
+                        <div class="widget widget_search">
+                            <form action="/cbis/searchStrain" method="get">
+                                <div class="form-group">
+                                    <label class="sr-only" for="page_search">Search for:</label>
+                                    <input type="text" id="page_search" value="" name="strain" class="form-control"
+                                           placeholder="strain's name">
+                                </div>
+                                <button type="submit" class="theme_button color1">Search</button>
+                            </form>
+                        </div>
+                        <p>or</p>
+                        <p><a href="/cbis/home" class="theme_button color3 min_width_button">Back to homepage</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="ds ms page_copyright section_padding_50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <p>Project for educational purposes, not commercial use. Developed by <a
+                                href="http://ferrara.link/">Armando Ferrara</a> and Andrea Mogavero, for further
+                            information <a href="https://github.com/Armando1514/cbis-data-integration">search on
+                                GitHub.</a>
+                        </p>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- eof #box_wrapper -->
+</div>
+<!-- eof #canvas -->
+<script src="js/compressed.js"></script>
+<script src="js/main.js"></script>
+<script src="js/switcher.js"></script>
+</body>
+<!-- Mirrored from webdesign-finder.com/html/canabia/404.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 10 Jul 2019 10:12:53 GMT -->
+
+</html>
