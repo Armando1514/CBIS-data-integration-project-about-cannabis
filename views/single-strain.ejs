@@ -76,7 +76,7 @@
                                               let reviews;
                                               let similarStrains;
 
-                        if(strainInfo[1][1]!== null && strainInfo[1][1]!== undefined){
+                        if(strainInfo[1][1]!= null && strainInfo[1][1]!= undefined){
 
                        whatIs = strainInfo[1][0]["what is"];
                        whereIsPopular = strainInfo[1][2];
@@ -214,7 +214,7 @@
             </div>
 
         </section>
-        <% if( videoReview !== null){ %>
+        <% if( videoReview != null){ %>
         <section class="ls section_padding_top_150">
 
             <div class="container">
@@ -233,7 +233,7 @@
                 </div>
             </div>
         </section>
-        <% } else if( picture !== null){%>
+        <% } else if( picture != null){%>
 
                 <section class="ls section_padding_top_150">
 
@@ -282,14 +282,14 @@
 
                                																									</span>
                                 </div>
-                                 <% if(smallPicture !== null){ %>
+                                 <% if(smallPicture != null){ %>
                                  <div>
                                         <img class="post-author" src="<%= smallPicture %>" alt="small picture about the strain" >
                                 </div>
                                <%} %>
                             </div>
                             <div class="item-content">
-                            <% if (timeOfUse !== null){ %>
+                            <% if (timeOfUse != null){ %>
                             <p class="theme_button min_width_button color2"><i class="fa fa-sun-o rightpadding_5"></i><i class="fa fa-moon-o rightpadding_5"></i>Time of use: <%= timeOfUse %> </p>
 <% }%>
                                 <div class="entry-content">
@@ -320,13 +320,13 @@
 
 
                                 					</div>
-                                <% if(whatIs !== null && whatIs !== undefined){ %>
+                                <% if(whatIs != null && whatIs != undefined){ %>
                                 <h5>What is ? </h5>
                                     <p><%= whatIs %></p>
                                         <% } %>
                                         		<div class="container-fluid">
 
-                                        		<% if(indicaSativa !== undefined){ %>
+                                        		<% if(indicaSativa != undefined){ %>
 
 		<% indicaSativa = indicaSativa.split('/').map(function(item) {
                                                      return parseInt(item, 10);
@@ -390,7 +390,7 @@
                                     <ul class="list2 grey regular">
 
 <%
-if(JSON.stringify({}) !== JSON.stringify(fragrance)){
+if(JSON.stringify({}) != JSON.stringify(fragrance)){
 fragrance = fragrance.split(",")
   fragrance.forEach(function(element) {
   %>
@@ -478,8 +478,8 @@ fragrance = fragrance.split(",")
 <% } %>
 
 					</div>
-                                                     <% if(JSON.stringify(origin) !== JSON.stringify({})){ %>
-<% if(similarStrains!== undefined) { %>
+                                                     <% if(JSON.stringify(origin) != JSON.stringify({})){ %>
+<% if(similarStrains!= undefined) { %>
 <h5>Similar strains</h5>
 
                                     <ul class="list2 grey regular">
@@ -496,7 +496,7 @@ fragrance = fragrance.split(",")
 
 <% } %>
 <% } %>
-                                                     <% if(JSON.stringify(origin) !== undefined){
+                                                     <% if(JSON.stringify(origin) != undefined){
                                                       %>
                             		 					                              <p class="theme_button min_width_button color2" style="float:right;"><i class="fa fa-leaf rightpadding_5"></i> Origin: <%= origin %> </p>
 
@@ -516,7 +516,7 @@ fragrance = fragrance.split(",")
    <p class="theme_button min_width_button " ><i class="fa fa-hospital-o rightpadding_5"></i> Resistance to disease: <%= resistanceToDisease %> </p>
 
                             <div class="row">
-                            <% if(plantHeight !== undefined) { %>
+                            <% if(plantHeight != undefined) { %>
 	<div class="col-sm-6 col-lg-6" >
                                 							<div class="teaser media after_cover "  style="border: 1px solid  #ffffff; ">
                                 								<div class="media-body" >
@@ -530,7 +530,7 @@ fragrance = fragrance.split(",")
                                 						</div>
                                 						<% } %>
                                 						<!-- .col-* -->
-                                						<% if(climate !== undefined) { %>
+                                						<% if(climate != undefined) { %>
                                 						<div class="col-sm-6 col-lg-6" >
                                 							<div class="teaser media after_cover" style="border: 1px solid  #ffffff;">
                                 								<div class="media-body">
@@ -550,7 +550,7 @@ fragrance = fragrance.split(",")
                                         <p><%=descriptions["growing description"] %></p>
 
                                     <p>
-                                        <% if(videoReview !== null) {%>
+                                        <% if(videoReview != null) {%>
                                         <img class="alignleft rounded" alt="" src="<%= picture %>">
                                         <% } else { %>
                                         <img class="alignleft rounded" alt="" src="/cbis/public/images/side-image.jpg">
@@ -590,7 +590,7 @@ fragrance = fragrance.split(",")
                                     </ul>
                                     </div>
 
-					                                        				<% if(price !== null) {%>
+					                                        				<% if(price != null) {%>
                                                         <div  style="text-align:center" >
 
                                                         							<div class="teaser text-center">
@@ -601,7 +601,7 @@ fragrance = fragrance.split(",")
                                                         </div>
 <% } %>
 
-<% if(video !== null){
+<% if(video != null){
 %>
 
 <h4>Video about growing</h4>
@@ -637,7 +637,7 @@ fragrance = fragrance.split(",")
 
                                                     </div>
                                             		<div class="row">
-                                            		<% if(reviews !== null){ %>
+                                            		<% if(reviews != null){ %>
 <h5>Opinions </h5>
 <div class="row">
 						<div class="row text-center">
@@ -675,7 +675,7 @@ fragrance = fragrance.split(",")
 
                                                 <div class="comment-body">
                                                     <div style="text-align:center" class="comment-meta darklinks hover-color2">
-                                                     <% if(JSON.stringify(whereIsPopular) !== JSON.stringify({}) && whereIsPopular !== undefined){ %>
+                                                     <% if(JSON.stringify(whereIsPopular) != JSON.stringify({}) && whereIsPopular != undefined){ %>
                                                        <h5>Where is popular? </h5>
                                                                                                                             <ul class="list2 grey regular">
 
