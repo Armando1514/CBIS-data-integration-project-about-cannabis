@@ -44,12 +44,24 @@ async function createStrainCollectionIndex(collection) {
             name: 'typesIndex'
         });
         logger.info('typeIndex has been created');
-        await connection.getDatabase().collection('strains').createIndex({
-            name: "text"
-        });
-        logger.info('name_text index has been created');
+
 
     } catch (error) {
+        logger.error(error);
+    }
+}
+
+async function createNameTextIndex(collection)
+{
+		try {
+	        await collection.createIndex({
+            name: "text"
+			});
+			
+			logger.info('name_text index has been created');
+		
+		    } 
+			catch (error) {
         logger.error(error);
     }
 }
@@ -60,7 +72,8 @@ async function createStrainsCollection(db) {
         logger.info('strains has been created');
         await Promise.all([
             createStrainCollectionIndex(collection),
-            populatStrainsCollection(collection)
+            populatStrainsCollection(collection),
+			createNameTextIndex(collection)
         ]);
     } catch (error) {
         logger.error(error);
