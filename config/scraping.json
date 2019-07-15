@@ -48,7 +48,7 @@
     "generalInfo": {
       "sectionTitleCSSPath": "div.reg_content h2",
       "sectionContent": {
-        "selectSectionsCSSPath": "table + p + p, table + p + a",
+        "selectSectionsCSSPath": "table + p + p, table + p + a, table + blockquote + a, table + p ",
         "sectionsUntilFirstCSSPath": ".author_description",
         "filterSelectorCSSPath": "h2 , p"
       }

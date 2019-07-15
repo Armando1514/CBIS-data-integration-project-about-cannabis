@@ -409,7 +409,10 @@ fragrance = fragrance.split(",")
 
                                     <ul class="list2 grey regular">
 
-<% flavors = flavors.split(",")
+<%
+if(!(flavors instanceof Object))
+{
+flavors = flavors.split(",")
 
   flavors.forEach(function(element) {
    randomColor = color[Math.floor(Math.random() * color.length)];%>
@@ -420,7 +423,8 @@ fragrance = fragrance.split(",")
   							    role="alert">  <strong><%=element%></strong></div>
 
   					</div>
-  <% });%>
+  <% });
+  }%>
                                     </ul>
 
 </div>
@@ -478,7 +482,7 @@ fragrance = fragrance.split(",")
 <% } %>
 
 					</div>
-                                                     <% if(JSON.stringify(origin) != JSON.stringify({})){ %>
+                                                     <% if(JSON.stringify(origin) != JSON.stringify({}) ){ %>
 <% if(similarStrains!= undefined) { %>
 <h5>Similar strains</h5>
 

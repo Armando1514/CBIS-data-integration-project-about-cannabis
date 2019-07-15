@@ -101,6 +101,7 @@ async function getInformationTable($) {
 
 async function getGeneralInfo($) {
 
+
     let generalInfo = {};
     let previousDescription = "";
     let index = 0;
@@ -140,11 +141,12 @@ async function getGeneralInfo($) {
 
     });
 
-    if (generalInfo[titleArray[index - 1].toLowerCase()] === "")
-        generalInfo[titleArray[index - 1].toLowerCase()] = previousDescription;
+    if (JSON.stringify(generalInfo) !== JSON.stringify("{}"))
+        if (generalInfo[titleArray[index - 1].toLowerCase()] === "")
+            generalInfo[titleArray[index - 1].toLowerCase()] = previousDescription;
+
 
     delete generalInfo["top 50 marijuana strains" + " description"];
-
     return generalInfo;
 
 }

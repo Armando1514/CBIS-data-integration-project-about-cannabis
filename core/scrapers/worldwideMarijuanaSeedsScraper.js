@@ -41,6 +41,7 @@ async function getInformationAboutStrainFromWorldWideMarijuanaSeedsScraper(strai
             return resObj;
         }
     } catch (error) {
+        let resObj = {};
         resObj["price"] = null;
 
         return resObj;
