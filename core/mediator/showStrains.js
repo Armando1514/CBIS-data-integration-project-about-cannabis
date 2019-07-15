@@ -114,8 +114,9 @@ async function loadStrainsType(req, res) {
             pageCount = parseInt(pageCount);
         }
 
-        switch (true) {
-            case NaN:
+
+        switch (pageRequested) {
+            case undefined:
                 pageRequested = 1;
                 break;
             case pageCount < pageRequested:

@@ -34,7 +34,7 @@ app.get([config.basepath + '/:type/single-strain/:name', config.basepath + '/:ty
 
 
 //The 404 Route (ALWAYS Keep this as the last route)
-app.all('*', function (req, res) {
+app.all(config.basepath + '*', function (req, res) {
     res.redirect(config.basepath + '/public/404.html');
 });
 

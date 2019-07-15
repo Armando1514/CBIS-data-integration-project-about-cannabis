@@ -2,7 +2,7 @@
     "youtube": {
         "config": {
             "version": "v3",
-            "auth": "AIzaSyCzLRDrd4i7rEFjZtQxvs-AqqeGCWGAxe8"
+          "auth": ""
         },
         "searchOptions": {
             "part": "id",
