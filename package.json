@@ -25,7 +25,7 @@
     "loglevel": "^1.6.3",
     "merge-deep": "^3.0.2",
     "mongodb": "^3.2.7",
-    "mongoose": "^5.6.0",
+    "mongoose": "^5.7.5",
     "xmldom": "^0.1.27",
     "xpath": "0.0.27"
   }
