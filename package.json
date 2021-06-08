@@ -23,7 +23,7 @@
     "express": "^4.17.1",
     "googleapis": "^40.0.1",
     "loglevel": "^1.6.3",
-    "merge-deep": "^3.0.2",
+    "merge-deep": "^3.0.3",
     "mongodb": "^3.2.7",
     "mongoose": "^5.7.5",
     "xmldom": "^0.1.27",
